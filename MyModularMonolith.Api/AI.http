@@ -1,0 +1,30 @@
+@MyModularMonolith.Api_HostAddress = http://localhost:5182
+@contentType = application/json
+
+# ===========================================
+# AI AGENT TESTING ENDPOINTS
+# ===========================================
+
+### AI-1. Analyze Reservations with AI
+POST {{MyModularMonolith.Api_HostAddress}}/api/ai/reservations/analyze/4FF5C5AB-069D-47EB-8344-D5C7FD90A826/slot?dateTime=2025-12-30T18:30:00Z
+Accept: application/json
+
+###
+
+### AI-2. Get AI Recommendations
+POST {{MyModularMonolith.Api_HostAddress}}/api/ai/reservations/recommendations/4FF5C5AB-069D-47EB-8344-D5C7FD90A826/slot?dateTime=2025-12-30T18:30:00Z
+Accept: application/json
+
+###
+
+### AI-3. Get AI Summary 
+POST {{MyModularMonolith.Api_HostAddress}}/api/ai/reservations/summary/4FF5C5AB-069D-47EB-8344-D5C7FD90A826/slot?dateTime=2025-12-30T18:30:00Z
+Accept: application/json
+
+
+### AI-5. Get Recommendations for Overbooked Scenario
+# First ensure you have multiple reservations for this slot
+POST {{MyModularMonolith.Api_HostAddress}}/api/ai/reservations/recommendations/4FF5C5AB-069D-47EB-8344-D5C7FD90A826/slot?dateTime=2025-12-24T18:30:00Z
+Accept: application/json
+
+###

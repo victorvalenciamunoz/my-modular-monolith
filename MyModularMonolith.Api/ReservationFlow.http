@@ -1,0 +1,179 @@
+@MyModularMonolith.Api_HostAddress = http://localhost:5182
+@contentType = application/json
+
+# ===========================================
+# COMPLETE WORKFLOW: SPINNING CLASS SETUP
+# ===========================================
+
+### 1. Add Spinning Class to Gym Sur with specific schedule
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/55555555-5555-5555-5555-555555555555/products
+Content-Type: {{contentType}}
+
+{
+  "productId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+  "price": 16.00,
+  "discountPercentage": 5,
+  "schedule": "{\"tuesday\":[\"18:30-19:30\"],\"thursday\":[\"18:30-19:30\"],\"saturday\":[\"10:00-11:00\"]}",
+  "minCapacity": 5,
+  "maxCapacity": 20,
+  "instructorName": "Ana Fernández",
+  "instructorEmail": "ana.fernandez@gymsur.com",
+  "instructorPhone": "+34 666 123 456",
+  "notes": "Clase de spinning en Gym Sur con horarios específicos",
+  "equipment": "Bicicletas Schwinn IC4, sistema de sonido premium"
+}
+
+###
+
+# ===========================================
+# USER REGISTRATION
+# ===========================================
+
+### 2. Register User 1 (Carlos)
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "carlos.lopez@email.com",
+  "firstName": "Carlos",
+  "lastName": "López",
+  "role": "User",
+  "homeGymId": "55555555-5555-5555-5555-555555555555",
+  "generateTemporaryPassword": true
+}
+
+###
+
+### 3. Register User 2 (Maria)
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "maria.garcia@email.com",
+  "firstName": "María",
+  "lastName": "García",
+  "role": "User",
+  "homeGymId": "55555555-5555-5555-5555-555555555555",
+  "generateTemporaryPassword": true
+}
+
+###
+
+### 4. Register User 3 (Juan)
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "juan.martinez@email.com",
+  "firstName": "Juan",
+  "lastName": "Martínez",
+  "role": "User",
+  "homeGymId": "55555555-5555-5555-5555-555555555555",
+  "generateTemporaryPassword": true
+}
+
+###
+
+# ===========================================
+# RESERVATIONS FOR SAME SLOT
+# ===========================================
+
+### 5. Create Reservation - Carlos (Tuesday 18:30)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+
+{
+  "userId": "A03D4087-D35D-448A-9E62-5A5DD26A2720",
+  "gymProductId": "4FF5C5AB-069D-47EB-8344-D5C7FD90A826",
+  "reservationDateTime": "2025-12-30T18:30:00Z",
+  "userNotes": "Primera clase de spinning - Carlos"
+}
+
+###
+
+### 6. Create Reservation - Maria (Tuesday 18:30)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+
+{
+  "userId": "7E5C3F8B-A0C5-49F7-891D-578942B08AD0",
+  "gymProductId": "4FF5C5AB-069D-47EB-8344-D5C7FD90A826",
+  "reservationDateTime": "2025-12-30T18:30:00Z",
+  "userNotes": "Spinning class - María"
+}
+
+###
+
+### 7. Create Reservation - Juan (Tuesday 18:30 slot)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+
+{
+  "userId": "D203157E-98EA-4C87-92F6-AE67D4F8A0F1",
+  "gymProductId": "4FF5C5AB-069D-47EB-8344-D5C7FD90A826",
+  "reservationDateTime": "2025-12-30T18:30:00Z",
+  "userNotes": "Clase de spinning - Juan"
+}
+
+###
+
+# ===========================================
+# VERIFICATION AND SLOT MANAGEMENT
+# ===========================================
+
+### 8. Check all reservations for the Tuesday 18:30 slot
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/gym-product/4FF5C5AB-069D-47EB-8344-D5C7FD90A826/slot?dateTime=2025-12-30T18:30:00Z
+Accept: application/json
+
+###
+
+### 9. Confirm Carlos's reservation (replace with actual reservation ID)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations/[REPLACE_WITH_CARLOS_RESERVATION_ID]/confirm
+
+###
+
+### 10. Confirm Maria's reservation (replace with actual reservation ID)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations/[REPLACE_WITH_MARIA_RESERVATION_ID]/confirm
+
+###
+
+### 11. Check updated slot status after confirmations
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/gym-product/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/slot?dateTime=2025-12-30T18:30:00Z
+Accept: application/json
+
+###
+
+### 12. Get Carlos's reservations
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/user/[REPLACE_WITH_CARLOS_USER_ID]
+Accept: application/json
+
+###
+
+### 13. Get available slots for Spinning class at Gym Sur
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/available-slots/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb?date=2025-12-30
+Accept: application/json
+
+###
+
+# ===========================================
+# OPTIONAL: ADDITIONAL TESTING
+# ===========================================
+
+### 14. Create 4th reservation (should exceed maxCapacity if confirmed)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+
+{
+  "userId": "11111111-1111-1111-1111-111111111111",
+  "gymProductId": "4FF5C5AB-069D-47EB-8344-D5C7FD90A826",
+  "reservationDateTime": "2025-12-30T18:30:00Z",
+  "userNotes": "Testing overbooking scenario"
+}
+
+###
+
+### 15. Final slot check with overbooking
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/gym-product/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb/slot?dateTime=2025-12-30T18:30:00Z
+Accept: application/json
+
+###

@@ -1,0 +1,186 @@
+@MyModularMonolith.Api_HostAddress = http://localhost:5182
+@contentType = application/json
+
+# ===========================================
+# USERS MODULE - AUTHENTICATION ENDPOINTS
+# ===========================================
+
+### 1. Register SuperAdmin User
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "admin@gym.com",
+  "firstName": "Super",
+  "lastName": "Admin",
+  "password": "Admin123!",
+  "role": "SuperAdmin",
+  "generateTemporaryPassword": false
+}
+
+###
+
+### 2. Register Gym User with Temporary Password
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "user@gym.com",
+  "firstName": "Juan",
+  "lastName": "Pérez",
+  "role": "User",
+  "homeGymId": "33333333-3333-3333-3333-333333333333",
+  "homeGymName": "Gym Central",
+  "generateTemporaryPassword": true
+}
+
+###
+
+### 3. Register Gym User with Custom Password
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "victor@gym.com",
+  "firstName": "Víctor",
+  "lastName": "García",
+  "password": "User123!",
+  "role": "User",
+  "homeGymId": "44444444-4444-4444-4444-444444444444",
+  "homeGymName": "Gym Norte",
+  "generateTemporaryPassword": false
+}
+
+###
+
+### 4. Login with SuperAdmin
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "admin@gym.com",
+  "password": "Admin123!"
+}
+
+###
+
+### 5. Login with User (use temporary password from registration response)
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "user@gym.com",
+  "password": "4TvNkuJ9"
+}
+
+###
+
+### 6. Change Password (for temporary password users)
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/change-password
+Content-Type: {{contentType}}
+
+{
+  "email": "user@gym.com",
+  "currentPassword": "4TvNkuJ9",
+  "newPassword": "MyNewPassword123!"
+}
+
+###
+
+# ===========================================
+# USER ERROR SCENARIOS FOR TESTING
+# ===========================================
+
+### 7. Register with Invalid Email
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "invalid-email",
+  "firstName": "Test",
+  "lastName": "User",
+  "password": "Test123!",
+  "role": "User"
+}
+
+###
+
+### 8. Register with Invalid Role
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "test@gym.com",
+  "firstName": "Test",
+  "lastName": "User",
+  "password": "Test123!",
+  "role": "InvalidRole"
+}
+
+###
+
+### 9. Register User without Gym (should fail)
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "nogym@gym.com",
+  "firstName": "No",
+  "lastName": "Gym",
+  "password": "Test123!",
+  "role": "User"
+}
+
+###
+
+### 10. Register User with Non-existent Gym
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "badgym@gym.com",
+  "firstName": "Bad",
+  "lastName": "Gym",
+  "password": "Test123!",
+  "role": "User",
+  "homeGymId": "99999999-9999-9999-9999-999999999999",
+  "homeGymName": "Non Existent Gym"
+}
+
+###
+
+### 11. Login with Wrong Credentials
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "admin@gym.com",
+  "password": "WrongPassword123!"
+}
+
+###
+
+### 12. Login with Non-existent User
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "nonexistent@gym.com",
+  "password": "Test123!"
+}
+
+###
+
+### 13. Duplicate User Registration (should fail)
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "admin@gym.com",
+  "firstName": "Duplicate",
+  "lastName": "Admin",
+  "password": "Test123!",
+  "role": "SuperAdmin"
+}
+
+###

@@ -1,0 +1,362 @@
+@MyModularMonolith.Api_HostAddress = http://localhost:5182
+@contentType = application/json
+
+# ===========================================
+# GYMS MODULE - GYMS ENDPOINTS
+# ===========================================
+
+### 1. Get All Active Gyms 
+GET {{MyModularMonolith.Api_HostAddress}}/api/gyms
+Accept: application/json
+
+###
+
+### 2. Get Gym by ID
+GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333
+Accept: application/json
+
+###
+
+# ===========================================
+# GYMS MODULE - PRODUCTS ENDPOINTS
+# ===========================================
+
+### 3. Get All Products
+GET {{MyModularMonolith.Api_HostAddress}}/api/products
+Accept: application/json
+
+###
+
+### 4. Get Product by ID (Acceso Sala Musculación)
+GET {{MyModularMonolith.Api_HostAddress}}/api/products/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+Accept: application/json
+
+###
+
+### 5. Get Product by ID (Clase de Spinning)
+GET {{MyModularMonolith.Api_HostAddress}}/api/products/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb
+Accept: application/json
+
+###
+
+### 6. Get Product by ID (Entrenamiento Personal)
+GET {{MyModularMonolith.Api_HostAddress}}/api/products/cccccccc-cccc-cccc-cccc-cccccccccccc
+Accept: application/json
+
+###
+
+### 7. Create Product - Acceso Premium
+POST {{MyModularMonolith.Api_HostAddress}}/api/products
+Content-Type: {{contentType}}
+
+{
+  "name": "Acceso Premium VIP",
+  "description": "Acceso completo a todas las instalaciones premium con servicios exclusivos",
+  "basePrice": 55.00,
+  "requiresSchedule": false,
+  "requiresInstructor": false,
+  "hasCapacityLimits": true
+}
+
+###
+
+### 8. Create Product - Clase de Yoga
+POST {{MyModularMonolith.Api_HostAddress}}/api/products
+Content-Type: {{contentType}}
+
+{
+  "name": "Clase de Yoga",
+  "description": "Clase de yoga relajante para todos los niveles con técnicas de respiración",
+  "basePrice": 18.00,
+  "requiresSchedule": true,
+  "requiresInstructor": true,
+  "hasCapacityLimits": true
+}
+
+###
+
+### 9. Create Product - Entrenamiento Personal Premium
+POST {{MyModularMonolith.Api_HostAddress}}/api/products
+Content-Type: {{contentType}}
+
+{
+  "name": "Entrenamiento Personal Premium",
+  "description": "Sesión personalizada con entrenador certificado y plan nutricional",
+  "basePrice": 65.00,
+  "requiresSchedule": true,
+  "requiresInstructor": true,
+  "hasCapacityLimits": false
+}
+
+###
+
+### 10. Create Product - Sesión de Fisioterapia
+POST {{MyModularMonolith.Api_HostAddress}}/api/products
+Content-Type: {{contentType}}
+
+{
+  "name": "Sesión de Fisioterapia Deportiva",
+  "description": "Terapia de rehabilitación y prevención de lesiones deportivas",
+  "basePrice": 45.00,
+  "requiresSchedule": true,
+  "requiresInstructor": true,
+  "hasCapacityLimits": false
+}
+
+###
+
+### 11. Create Product - Consulta Nutricional Premium
+POST {{MyModularMonolith.Api_HostAddress}}/api/products
+Content-Type: {{contentType}}
+
+{
+  "name": "Consulta Nutricional Premium",
+  "description": "Consulta completa con nutricionista deportivo y plan alimentario detallado",
+  "basePrice": 60.00,
+  "requiresSchedule": true,
+  "requiresInstructor": true,
+  "hasCapacityLimits": false
+}
+
+###
+
+### 12. Create Product - Taquilla Premium
+POST {{MyModularMonolith.Api_HostAddress}}/api/products
+Content-Type: {{contentType}}
+
+{
+  "name": "Taquilla Premium",
+  "description": "Alquiler de taquilla premium con servicios adicionales",
+  "basePrice": 8.00,
+  "requiresSchedule": false,
+  "requiresInstructor": false,
+  "hasCapacityLimits": false
+}
+
+###
+
+# ===========================================
+# GYMS MODULE - GYM PRODUCTS ENDPOINTS
+# ===========================================
+
+### 13. Get Products for Gym Central (all active products)
+GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333/products
+Accept: application/json
+
+###
+
+### 14. Get Products for Gym Norte (including inactive)
+GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/44444444-4444-4444-4444-444444444444/products?includeInactive=true
+Accept: application/json
+
+###
+
+### 15. Get Products for Gym Sur
+GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/55555555-5555-5555-5555-555555555555/products
+Accept: application/json
+
+###
+
+### 16. Add Gym Access Product to Gym Sur (basic configuration)
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/55555555-5555-5555-5555-555555555555/products
+Content-Type: {{contentType}}
+
+{
+  "gymId": "55555555-5555-5555-5555-555555555555",
+  "productId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+  "price": 32.00,
+  "discountPercentage": 8,
+  "maxCapacity": 45,
+  "notes": "Acceso completo a sala de musculación con descuento para socios"
+}
+
+###
+
+### 17. Add Spinning Class to Gym Sur (with full configuration)
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/55555555-5555-5555-5555-555555555555/products
+Content-Type: {{contentType}}
+
+{
+  "gymId": "55555555-5555-5555-5555-555555555555",
+  "productId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+  "price": 17.00,
+  "discountPercentage": 10,
+  "schedule": "{\"tuesday\": [\"07:30-08:30\", \"19:00-20:00\"], \"thursday\": [\"07:30-08:30\", \"19:00-20:00\"], \"saturday\": [\"10:00-11:00\"]}",
+  "minCapacity": 6,
+  "maxCapacity": 22,
+  "instructorName": "Roberto García",
+  "instructorEmail": "roberto.garcia@gymsur.com",
+  "instructorPhone": "+34 666 111 222",
+  "notes": "Clase de spinning con música electrónica",
+  "equipment": "Bicicletas estáticas Life Fitness, sistema de sonido Bose"
+}
+
+###
+
+### 18. Add Personal Training to Gym Central
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333/products
+Content-Type: {{contentType}}
+
+{
+  "gymId": "33333333-3333-3333-3333-333333333333",
+  "productId": "cccccccc-cccc-cccc-cccc-cccccccccccc",
+  "price": 48.00,
+  "discountPercentage": 5,
+  "schedule": "{\"monday\": [\"08:00-18:00\"], \"tuesday\": [\"08:00-18:00\"], \"wednesday\": [\"08:00-18:00\"], \"thursday\": [\"08:00-18:00\"], \"friday\": [\"08:00-18:00\"]}",
+  "instructorName": "Elena Martínez",
+  "instructorEmail": "elena.martinez@gymcentral.com",
+  "instructorPhone": "+34 666 333 444",
+  "notes": "Entrenamiento personalizado con seguimiento nutricional",
+  "equipment": "Área funcional completa, TRX, kettlebells, mancuernas"
+}
+
+###
+
+### 19. Add Nutrition Consultation to Gym Norte
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/44444444-4444-4444-4444-444444444444/products
+Content-Type: {{contentType}}
+
+{
+  "gymId": "44444444-4444-4444-4444-444444444444",
+  "productId": "dddddddd-dddd-dddd-dddd-dddddddddddd",
+  "price": 42.00,
+  "discountPercentage": 15,
+  "schedule": "{\"monday\": [\"09:00-13:00\", \"15:00-19:00\"], \"wednesday\": [\"09:00-13:00\", \"15:00-19:00\"], \"friday\": [\"09:00-13:00\"]}",
+  "instructorName": "Dr. Carmen Ruiz",
+  "instructorEmail": "carmen.ruiz@gymnorte.com",
+  "instructorPhone": "+34 666 555 777",
+  "notes": "Consulta nutricional con plan personalizado y seguimiento",
+  "equipment": "Báscula de bioimpedancia InBody, software NutriCalc Pro"
+}
+
+###
+
+### 20. Add Zumba Class to Gym Sur (with discount)
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/55555555-5555-5555-5555-555555555555/products
+Content-Type: {{contentType}}
+
+{
+  "gymId": "55555555-5555-5555-5555-555555555555",
+  "productId": "eeeeeeee-eeee-eeee-eeee-eeeeeeeeeeee",
+  "price": 13.00,
+  "discountPercentage": 25,
+  "schedule": "{\"monday\": [\"20:00-21:00\"], \"wednesday\": [\"20:00-21:00\"], \"friday\": [\"18:30-19:30\"]}",
+  "minCapacity": 8,
+  "maxCapacity": 28,
+  "instructorName": "Isabel Moreno",
+  "instructorEmail": "isabel.moreno@gymsur.com",
+  "instructorPhone": "+34 666 888 999",
+  "notes": "Zumba fitness con ritmos latinos y reggaeton",
+  "equipment": "Sistema de sonido JBL, espejos panorámicos, suelo de caucho"
+}
+
+###
+
+# ===========================================
+# GYMS ERROR SCENARIOS FOR TESTING
+# ===========================================
+
+### 21. Create Product with Negative Price
+POST {{MyModularMonolith.Api_HostAddress}}/api/products
+Content-Type: {{contentType}}
+
+{
+  "name": "Negative Price Product",
+  "description": "Product with negative price",
+  "basePrice": -10.00,
+  "requiresSchedule": false,
+  "requiresInstructor": false,
+  "hasCapacityLimits": false
+}
+
+###
+
+### 22. Create Product with Empty Name
+POST {{MyModularMonolith.Api_HostAddress}}/api/products
+Content-Type: {{contentType}}
+
+{
+  "name": "",
+  "description": "Product with empty name",
+  "basePrice": 25.00,
+  "requiresSchedule": false,
+  "requiresInstructor": false,
+  "hasCapacityLimits": false
+}
+
+###
+
+### 23. Get Product with Non-existent ID
+GET {{MyModularMonolith.Api_HostAddress}}/api/products/99999999-9999-9999-9999-999999999999
+Accept: application/json
+
+###
+
+### 24. Add Product to Non-existent Gym
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/99999999-9999-9999-9999-999999999999/products
+Content-Type: {{contentType}}
+
+{
+  "gymId": "99999999-9999-9999-9999-999999999999",
+  "productId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+  "price": 35.00
+}
+
+###
+
+### 25. Add Non-existent Product to Gym
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333/products
+Content-Type: {{contentType}}
+
+{
+  "gymId": "33333333-3333-3333-3333-333333333333",
+  "productId": "99999999-9999-9999-9999-999999999999",
+  "price": 35.00
+}
+
+###
+
+### 26. Add Same Product to Gym Twice (should fail with conflict)
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333/products
+Content-Type: {{contentType}}
+
+{
+  "gymId": "33333333-3333-3333-3333-333333333333",
+  "productId": "aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa",
+  "price": 35.00
+}
+
+###
+
+### 27. Get Products for Non-existent Gym
+GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/99999999-9999-9999-9999-999999999999/products
+Accept: application/json
+
+###
+
+### 28. Add Product with Invalid Discount Percentage (>100%)
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333/products
+Content-Type: {{contentType}}
+
+{
+  "gymId": "33333333-3333-3333-3333-333333333333",
+  "productId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+  "price": 15.00,
+  "discountPercentage": 150
+}
+
+###
+
+### 29. Add Product with Invalid Capacity (min > max)
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333/products
+Content-Type: {{contentType}}
+
+{
+  "gymId": "33333333-3333-3333-3333-333333333333",
+  "productId": "bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb",
+  "price": 15.00,
+  "minCapacity": 30,
+  "maxCapacity": 10
+}
+
+###

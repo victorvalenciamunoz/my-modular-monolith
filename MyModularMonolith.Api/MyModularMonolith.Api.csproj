@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>MyModularMonolith.Api</RootNamespace>
+    <UserSecretsId>6822a934-9b13-4e2e-9d6c-cbcaa5cac22e</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.OpenApi" />    
+    <PackageReference Include="ErrorOr" />
+    <PackageReference Include="Ardalis.GuardClauses" />
+    <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MyModularMonolith.Modules.Gyms\MyModularMonolith.Modules.Gyms.csproj" />
+    <ProjectReference Include="..\MyModularMonolith.Modules.Users\MyModularMonolith.Modules.Users.csproj" />
+		<ProjectReference Include="..\MyModularMonolith.Modules.AI\MyModularMonolith.Modules.AI.csproj" />
+    <ProjectReference Include="..\MyModularMonolith.Shared\MyModularMonolith.Shared.csproj" />
+  </ItemGroup>  
+</Project>

@@ -1,0 +1,16 @@
+@MyModularMonolith.Api_HostAddress = http://localhost:5182
+@contentType = application/json
+
+### Health Check
+GET {{MyModularMonolith.Api_HostAddress}}/health
+Accept: application/json
+
+###
+
+# ===========================================
+# IMPORT MODULE-SPECIFIC HTTP FILES
+# ===========================================
+# Note: Use the following files for module-specific endpoints:
+# - Users.http (Authentication & User Management)
+# - Gyms.http (Gym Management & Products)
+# ===========================================

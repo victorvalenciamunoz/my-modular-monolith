@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+	<ItemGroup>
+		<!-- AI Packages -->
+		<PackageReference Include="Microsoft.Extensions.AI" />
+		<PackageReference Include="Microsoft.Extensions.AI.Abstractions" />
+		<PackageReference Include="GeminiDotnet.Extensions.AI" />
+
+		<!-- Microsoft Extensions -->
+		<PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+
+		<!-- Shared packages -->
+		<PackageReference Include="ErrorOr" />
+		<PackageReference Include="MediatR" />
+		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" />		
+	</ItemGroup>
+
+	<ItemGroup>		
+		<ProjectReference Include="..\MyModularMonolith.Modules.Gyms.Contracts\MyModularMonolith.Modules.Gyms.Contracts.csproj" />
+		<ProjectReference Include="..\MyModularMonolith.Shared\MyModularMonolith.Shared.csproj" />
+	</ItemGroup>
+</Project>

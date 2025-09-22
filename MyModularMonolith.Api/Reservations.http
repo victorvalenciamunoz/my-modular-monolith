@@ -1,0 +1,172 @@
+@MyModularMonolith.Api_HostAddress = http://localhost:5182
+@contentType = application/json
+
+# ===========================================
+# RESERVATIONS MODULE - RESERVATION ENDPOINTS
+# ===========================================
+
+### 1. Get Available Time Slots for Spinning Class (Gym Central)
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/available-slots/11111111-1111-1111-bbbb-111111111111?date=2025-12-22
+Accept: application/json
+
+###
+
+### 2. Create Reservation for Spinning Class (Monday 19:00)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+
+{
+  "userId": "11111111-1111-1111-1111-111111111111",
+  "gymProductId": "11111111-1111-1111-bbbb-111111111111",
+  "reservationDateTime": "2025-12-22T19:00:00Z",
+  "userNotes": "Primera clase de spinning"
+}
+
+###
+
+### 3. Create Reservation for Zumba Class (Gym Norte)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+
+{
+  "userId": "22222222-2222-2222-2222-222222222222",
+  "gymProductId": "22222222-2222-2222-eeee-222222222222",
+  "reservationDateTime": "2024-12-24T18:30:00Z",
+  "userNotes": "Clase de Zumba divertida"
+}
+
+###
+
+### 4. Get User Reservations (all)
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/user/11111111-1111-1111-1111-111111111111
+Accept: application/json
+
+###
+
+### 5. Cancel Reservation
+DELETE {{MyModularMonolith.Api_HostAddress}}/api/reservations/ffffffff-ffff-ffff-ffff-ffffffffffff
+Content-Type: {{contentType}}
+
+{
+  "userId": "11111111-1111-1111-1111-111111111111",
+  "cancellationReason": "Conflicto de horario"
+}
+
+###
+
+# ===========================================
+# RESERVATION ERROR SCENARIOS
+# ===========================================
+
+### 6. Create Reservation for Invalid Time Slot
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+
+{
+  "userId": "11111111-1111-1111-1111-111111111111",
+  "gymProductId": "11111111-1111-1111-bbbb-111111111111",
+  "reservationDateTime": "2024-12-23T15:00:00Z",
+  "userNotes": "Horario inválido (no está en el schedule)"
+}
+
+###
+
+### 7. Create Duplicate Reservation (user already has active reservation)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+
+{
+  "userId": "11111111-1111-1111-1111-111111111111",
+  "gymProductId": "22222222-2222-2222-eeee-222222222222",
+  "reservationDateTime": "2024-12-25T18:30:00Z",
+  "userNotes": "Segunda reserva (debería fallar)"
+}
+
+###
+
+### 8. Create Reservation for Past Date
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+
+{
+  "userId": "33333333-3333-3333-3333-333333333333",
+  "gymProductId": "11111111-1111-1111-bbbb-111111111111",
+  "reservationDateTime": "2024-01-01T19:00:00Z",
+  "userNotes": "Fecha en el pasado"
+}
+
+###
+
+### 9. Get Available Slots for Product without Schedule (Gym Access)
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/available-slots/11111111-1111-1111-aaaa-111111111111?date=2024-12-23
+Accept: application/json
+
+###
+
+### 10. Get Available Slots for Past Date (should fail)
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/available-slots/11111111-1111-1111-bbbb-111111111111?date=2024-01-01
+Accept: application/json
+
+###
+
+### 11. Cancel Non-existent Reservation
+DELETE {{MyModularMonolith.Api_HostAddress}}/api/reservations/99999999-9999-9999-9999-999999999999
+Content-Type: {{contentType}}
+
+{
+  "userId": "11111111-1111-1111-1111-111111111111",
+  "cancellationReason": "Reserva inexistente"
+}
+
+###
+
+### 12. Cancel Someone Else's Reservation (should fail with Forbidden)
+DELETE {{MyModularMonolith.Api_HostAddress}}/api/reservations/ffffffff-ffff-ffff-ffff-ffffffffffff
+Content-Type: {{contentType}}
+
+{
+  "userId": "99999999-9999-9999-9999-999999999999",
+  "cancellationReason": "Intentando cancelar reserva de otro usuario"
+}
+
+###
+
+# ===========================================
+# SLOT MANAGEMENT ENDPOINTS
+# ===========================================
+
+### 13. Get Reservations for Zumba Class Slot (Tuesday 18:30)
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/gym-product/22222222-2222-2222-eeee-222222222222/slot?dateTime=2025-12-24T18:30:00Z
+Accept: application/json
+
+###
+
+### 14. Get Reservations for Spinning Class Slot (Monday 19:00)
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/gym-product/11111111-1111-1111-bbbb-111111111111/slot?dateTime=2025-12-23T19:00:00Z
+Accept: application/json
+
+###
+
+### 15. Confirm Pending Reservation (replace with actual reservation ID)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa/confirm
+
+###
+
+### 16. Create Additional Reservation for Overbooking Test
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+
+{
+  "userId": "33333333-3333-3333-3333-333333333333",
+  "gymProductId": "22222222-2222-2222-eeee-222222222222",
+  "reservationDateTime": "2025-12-24T18:30:00Z",
+  "userNotes": "Testing overbooking scenario"
+}
+
+###
+
+### 17. Check Overbooked Slot Status
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/gym-product/22222222-2222-2222-eeee-222222222222/slot?dateTime=2025-12-24T18:30:00Z
+Accept: application/json
+
+###
