@@ -41,7 +41,7 @@ POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
 Content-Type: {{contentType}}
 
 {
-  "email": "victor_sport@gym.com",
+  "email": "victor_martinez@gym.com",
   "firstName": "Víctor",
   "lastName": "Sport",
   "password": "User123!",
@@ -58,7 +58,7 @@ POST {{MyModularMonolith.Api_HostAddress}}/api/auth/login
 Content-Type: {{contentType}}
 
 {
-  "email": "admin@gym.com",
+  "email": "admin1@gym.com",
   "password": "Admin123!"
 }
 

@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MyModularMonolith.Modules.Gyms.Contracts.Queries;
@@ -20,9 +19,6 @@ public static class GymsModuleExtensions
         services.AddMediatR(typeof(GetGymByIdQuery).Assembly);
 
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
-                
-        services.AddDbContext<GymsDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IGymRepository, GymRepository>();
         services.AddScoped<IProductRepository, ProductRepository>();

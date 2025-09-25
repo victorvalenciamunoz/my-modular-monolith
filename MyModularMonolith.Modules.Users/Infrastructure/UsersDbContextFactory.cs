@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using MyModularMonolith.Shared.Application;
 
 
 namespace MyModularMonolith.Modules.Users.Infrastructure;
@@ -19,7 +18,7 @@ public class UsersDbContextFactory : IDesignTimeDbContextFactory<UsersDbContext>
 
         var optionsBuilder = new DbContextOptionsBuilder<UsersDbContext>();
         var connectionString = configuration.GetConnectionString("DefaultConnection");
-        
+
         if (string.IsNullOrEmpty(connectionString))
         {
             throw new InvalidOperationException("Connection string 'DefaultConnection' not found in User Secrets or appsettings.json");
@@ -30,6 +29,6 @@ public class UsersDbContextFactory : IDesignTimeDbContextFactory<UsersDbContext>
             options.MigrationsHistoryTable("__EFMigrationsHistory", "Users");
         });
 
-        return new UsersDbContext(optionsBuilder.Options, new DateTimeProvider());
+        return new UsersDbContext(optionsBuilder.Options);
     }
 }

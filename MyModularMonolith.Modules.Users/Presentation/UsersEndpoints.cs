@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
+using MyModularMonolith.Modules.Users.Application.Services;
 using MyModularMonolith.Modules.Users.Contracts.Commands;
 using MyModularMonolith.Modules.Users.Domain;
 using MyModularMonolith.Modules.Users.Presentation.Models;
@@ -51,6 +52,7 @@ public static class UsersEndpoints
     private static async Task<IResult> RegisterUser(
         [FromBody] RegisterUserRequest request,
         [FromServices] IMediator mediator,
+        [FromServices] IUserMetricsService userMetrics,
         HttpContext httpContext,
         CancellationToken cancellationToken = default)
     {
@@ -70,7 +72,11 @@ public static class UsersEndpoints
             var result = await mediator.Send(command, cancellationToken);
 
             return result.Match(
-                success => Results.Created($"/api/users/{success.Id}", success),
+                success =>
+                {
+                    userMetrics.IncrementUserRegistrations();
+                    return Results.Created($"/api/users/{success.Id}", success);
+                },
                 errors => result.ToProblemDetails()
             );
         }

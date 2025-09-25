@@ -15,6 +15,14 @@
     <PackageReference Include="Ardalis.Specification.EntityFrameworkCore" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" />
+		<PackageReference Include="Aspire.Microsoft.EntityFrameworkCore.SqlServer" />
+		<PackageReference Include="Serilog.AspNetCore" />
+		<PackageReference Include="Serilog.Sinks.OpenTelemetry" />
+		<PackageReference Include="Serilog.Sinks.Console" />
+		<PackageReference Include="Serilog.Enrichers.Environment" />
+		<PackageReference Include="Serilog.Enrichers.Process" />
+		<PackageReference Include="Serilog.Enrichers.Thread" />
+		<PackageReference Include="Serilog.Settings.Configuration" />
   </ItemGroup>
 
   <ItemGroup>
@@ -22,5 +30,6 @@
     <ProjectReference Include="..\MyModularMonolith.Modules.Users\MyModularMonolith.Modules.Users.csproj" />
 		<ProjectReference Include="..\MyModularMonolith.Modules.AI\MyModularMonolith.Modules.AI.csproj" />
     <ProjectReference Include="..\MyModularMonolith.Shared\MyModularMonolith.Shared.csproj" />
+		<ProjectReference Include="..\MyModularMonolith.ServiceDefaults\MyModularMonolith.ServiceDefaults.csproj" />
   </ItemGroup>  
 </Project>

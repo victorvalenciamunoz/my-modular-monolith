@@ -26,10 +26,7 @@ public static class UsersModuleExtensions
         services.AddMediatR(typeof(GetGymByIdQuery).Assembly);        
 
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
-
-        services.AddDbContext<UsersDbContext>(options =>
-            options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
-
+        
         services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
         {
             // Password settings
@@ -79,7 +76,8 @@ public static class UsersModuleExtensions
 
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IEmailService, EmailService>();
-
+        services.AddSingleton<IUserMetricsService, UserMetricsService>();
+        
         return services;
     }
 

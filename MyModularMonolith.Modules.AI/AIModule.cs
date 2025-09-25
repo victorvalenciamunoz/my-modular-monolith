@@ -21,9 +21,6 @@ public static class AIModuleExtensions
 
         services.Configure<AIConfiguration>(configuration.GetSection(AIConfiguration.SectionName));
 
-        services.AddSingleton<ILoggerFactory>(serviceProvider =>
-                                           LoggerFactory.Create(logging => logging.AddConsole().SetMinimumLevel(LogLevel.Information)));
-
         ConfigureGeminiClient(services, aiConfig);
         services.AddScoped<IAIService, GeminiAIService>();
         services.AddScoped<IReservationAgent, ReservationAgent>();

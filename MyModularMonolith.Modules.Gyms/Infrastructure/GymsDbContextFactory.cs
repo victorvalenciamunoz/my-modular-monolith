@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
-using MyModularMonolith.Shared.Application;
 
 namespace MyModularMonolith.Modules.Gyms.Infrastructure;
 
@@ -11,7 +10,7 @@ public class GymsDbContextFactory : IDesignTimeDbContextFactory<GymsDbContext>
     {
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.Development.json", optional: true)
-            .AddUserSecrets("6822a934-9b13-4e2e-9d6c-cbcaa5cac22e") 
+            .AddUserSecrets("6822a934-9b13-4e2e-9d6c-cbcaa5cac22e")
             .SetBasePath(Path.Combine(Directory.GetCurrentDirectory(), "../MyModularMonolith.Api"))
             .AddJsonFile("appsettings.json", optional: true)
             .Build();
@@ -29,6 +28,6 @@ public class GymsDbContextFactory : IDesignTimeDbContextFactory<GymsDbContext>
             options.MigrationsHistoryTable("__EFMigrationsHistory", "Gyms");
         });
 
-        return new GymsDbContext(optionsBuilder.Options, new DateTimeProvider());
+        return new GymsDbContext(optionsBuilder.Options);
     }
 }

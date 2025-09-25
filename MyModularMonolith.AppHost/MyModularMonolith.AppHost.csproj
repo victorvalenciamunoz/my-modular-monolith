@@ -1,9 +1,23 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <Sdk Name="Aspire.AppHost.Sdk" Version="9.4.0" />
 
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
     <TargetFramework>net10.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <UserSecretsId>2057dae5-5bc9-48e2-8fec-6dc9740c6ea1</UserSecretsId>
   </PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="Aspire.Hosting.AppHost" />
+		<PackageReference Include="Aspire.Hosting.SqlServer" />
+		<PackageReference Include="BCat.Aspire.MailDev" />		
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\MyModularMonolith.Api\MyModularMonolith.Api.csproj" />
+		<ProjectReference Include="..\MyModularMonolith.ServiceDefaults\MyModularMonolith.ServiceDefaults.csproj" />
+	</ItemGroup>
 </Project>

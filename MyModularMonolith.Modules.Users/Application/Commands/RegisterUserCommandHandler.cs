@@ -127,6 +127,14 @@ internal class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand,
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
+        var domainEvents = user.DomainEvents.ToList();
+        user.ClearDomainEvents();
+
+        foreach (var domainEvent in domainEvents)
+        {
+            await _mediator.Publish(domainEvent, cancellationToken);
+        }
+
         return new UserDto(
             user.Id,
             request.Email.Value,
