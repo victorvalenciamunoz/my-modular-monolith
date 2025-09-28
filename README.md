@@ -1,86 +1,86 @@
 # My Modular Monolith
 
-Proyecto de aprendizaje que demuestra un Monolito Modular en .NET 10 (`net10.0`) aplicando DDD, principios SOLID y Clean Architecture. Expone una REST API, se orquesta con .NET Aspire y aplica patrones como Mediator, Result, Specification y Unit of Work. La caché utiliza FusionCache (actualmente L1/en memoria).
+Learning project that demonstrates a Modular Monolith on .NET 10 (`net10.0`) applying DDD, SOLID principles, and Clean Architecture. It exposes a REST API, is orchestrated with .NET Aspire, and uses patterns such as Mediator, Result, Specification, and Unit of Work. Caching uses FusionCache (currently L1/in-memory).
 
-> Nota: La solución usa paquetes preview para .NET 10; las APIs pueden cambiar.
+> Note: The solution uses preview packages for .NET 10; APIs may change.
 
-## Módulos y proyectos
+## Modules and Projects
 
 - `MyModularMonolith.Api` (`MyModularMonolith.Api.csproj`)
-  - Proyecto de REST API (Swagger/OpenAPI, Serilog, integración EF Core)
+  - REST API project (Swagger/OpenAPI, Serilog, EF Core integration)
 - `MyModularMonolith.AppHost` (`MyModularMonolith.AppHost.csproj`)
-  - Aspire AppHost que orquesta la app y dependencias (SQL Server, MailDev)
+  - Aspire AppHost orchestrating the app and dependencies (SQL Server, MailDev)
 - `MyModularMonolith.Modules.AI` (`MyModularMonolith.Modules.AI.csproj`)
-  - Funcionalidades de IA usando `Microsoft.Extensions.AI` y `GeminiDotnet.Extensions.AI`
+  - AI features using `Microsoft.Extensions.AI` and `GeminiDotnet.Extensions.AI`
 - `MyModularMonolith.Modules.Gyms` (`MyModularMonolith.Modules.Gyms.csproj`)
-  - Dominio/lógica de gimnasios, EF Core, Specifications, FusionCache (L1)
+  - Gyms domain/application logic, EF Core, Specifications, FusionCache (L1)
 - `MyModularMonolith.Modules.Users` (`MyModularMonolith.Modules.Users.csproj`)
-  - Dominio/lógica de usuarios, Identity + JWT
-- `MyModularMonolith.Shared`, `ServiceDefaults` y proyectos `*.Contracts`
-  - Abstracciones transversales, contratos entre módulos y convenciones comunes
+  - Users domain/application logic, Identity + JWT
+- `MyModularMonolith.Shared`, `ServiceDefaults`, and `*.Contracts` projects
+  - Cross-cutting abstractions, module contracts, and shared conventions
 
-## Arquitectura y patrones
+## Architecture and Patterns
 
-- Clean Architecture con límites explícitos por módulo (Monolito Modular)
-- DDD en cada módulo (entidades, value objects, specifications)
-- Capa de aplicación con `MediatR` (handlers para comandos/queries)
-- Patrón Result con `ErrorOr` para modelar éxito/fracaso
-- Persistencia con EF Core (SQL Server). `DbContext` actúa como Unit of Work
-- Caché con `FusionCache` (L1) y serialización `System.Text.Json`
-- Observabilidad con Serilog (Console, OpenTelemetry) y paquetes de instrumentación OTel
-- IA con `Microsoft.Extensions.AI` + proveedor Gemini en el módulo de AI
+- Clean Architecture with explicit per-module boundaries (Modular Monolith)
+- DDD within each module (entities, value objects, specifications)
+- Application layer with `MediatR` (handlers for commands/queries)
+- Result pattern with `ErrorOr` to model success/failure
+- Persistence with EF Core (SQL Server). `DbContext` plays the Unit of Work role
+- Caching with `FusionCache` (L1) and `System.Text.Json` serialization
+- Observability with Serilog (Console, OpenTelemetry) and OTel instrumentation packages
+- AI with `Microsoft.Extensions.AI` + Gemini provider in the AI module
 
-## Tecnologías y paquetes clave
+## Key Technologies and Packages
 
 - API/Hosting: `Microsoft.AspNetCore.OpenApi`, `Serilog.*`, `Aspire.Microsoft.EntityFrameworkCore.SqlServer`
-- Persistencia: `Microsoft.EntityFrameworkCore.SqlServer`, `Microsoft.EntityFrameworkCore.Design`
-- Aplicación/DDD: `MediatR`, `ErrorOr`, `Ardalis.Specification.EntityFrameworkCore`
-- Seguridad: `Microsoft.AspNetCore.Identity.EntityFrameworkCore`, `Microsoft.AspNetCore.Authentication.JwtBearer`, `System.IdentityModel.Tokens.Jwt`
-- Caché: `ZiggyCreatures.FusionCache`, `ZiggyCreatures.FusionCache.Serialization.SystemTextJson`
-- IA: `Microsoft.Extensions.AI`, `GeminiDotnet.Extensions.AI`
-- Aspire/Recursos: `Aspire.Hosting.AppHost`, `Aspire.Hosting.SqlServer`, `BCat.Aspire.MailDev`
+- Persistence: `Microsoft.EntityFrameworkCore.SqlServer`, `Microsoft.EntityFrameworkCore.Design`
+- Application/DDD: `MediatR`, `ErrorOr`, `Ardalis.Specification.EntityFrameworkCore`
+- Security: `Microsoft.AspNetCore.Identity.EntityFrameworkCore`, `Microsoft.AspNetCore.Authentication.JwtBearer`, `System.IdentityModel.Tokens.Jwt`
+- Caching: `ZiggyCreatures.FusionCache`, `ZiggyCreatures.FusionCache.Serialization.SystemTextJson`
+- AI: `Microsoft.Extensions.AI`, `GeminiDotnet.Extensions.AI`
+- Aspire/Resources: `Aspire.Hosting.AppHost`, `Aspire.Hosting.SqlServer`, `BCat.Aspire.MailDev`
 
-## Requisitos previos
+## Prerequisites
 
 - .NET 10 SDK (preview)
-- Visual Studio 2022 (última versión con soporte para .NET 10) o CLI de .NET
-- Docker Desktop (recomendado para recursos Aspire como SQL Server y MailDev)
+- Visual Studio 2022 (latest with .NET 10 support) or .NET CLI
+- Docker Desktop (recommended for Aspire resources like SQL Server and MailDev)
 
-## Cómo ejecutar
+## How to Run
 
-Restaurar y compilar
+Restore and build
 
-- Visual Studio: Abrir la solución, restaurar paquetes y compilar
+- Visual Studio: Open the solution, restore packages, and build
 - CLI:
   - `dotnet restore`
   - `dotnet build -c Debug`
 
-Ejecutar con Aspire
+Run with Aspire
 
 - Visual Studio
-  - Establecer `MyModularMonolith.AppHost` como proyecto de inicio
-  - Iniciar depuración (abrirá Aspire Dashboard y levantará API + SQL Server + MailDev)
+  - Set `MyModularMonolith.AppHost` as the Startup Project
+  - Start debugging (this opens Aspire Dashboard and starts API + SQL Server + MailDev)
 - CLI
   - `dotnet run --project ./MyModularMonolith.AppHost/MyModularMonolith.AppHost.csproj`
 
-## API y documentación
+## API and Documentation
 
-- Swagger/OpenAPI está habilitado en `MyModularMonolith.Api`. Al ejecutar, abre la URL que muestra el Aspire Dashboard
-- El repositorio incluye archivos `*.http` (p. ej. `MyModularMonolith.Api/Gyms.http`) para probar rápidamente desde VS/VS Code
+- Swagger/OpenAPI is enabled in `MyModularMonolith.Api`. When running, open the URL shown in Aspire Dashboard
+- The repo includes `*.http` files (e.g., `MyModularMonolith.Api/Gyms.http`) for quick testing from VS/VS Code
 
-## Configuración
+## Configuration
 
 - User Secrets
-  - `MyModularMonolith.Api` y `MyModularMonolith.AppHost` definen `UserSecretsId`
-  - Guarda valores sensibles (JWT, claves de IA, etc.) con User Secrets
+  - `MyModularMonolith.Api` and `MyModularMonolith.AppHost` define `UserSecretsId`
+  - Store sensitive values (JWT, AI keys, etc.) with User Secrets
 - SQL Server
-  - Suministrado por Aspire (`Aspire.Hosting.SqlServer`)
-  - La cadena de conexión se inyecta/gestiona en tiempo de ejecución por Aspire
+  - Provided by Aspire (`Aspire.Hosting.SqlServer`)
+  - Connection string is injected/managed by Aspire at runtime
 - Logging/Tracing
-  - Serilog con Console y OpenTelemetry sink
-  - Puedes apuntar el exportador OTLP a tu collector (variables de entorno/User Secrets)
+  - Serilog with Console and OpenTelemetry sink
+  - You can point the OTLP exporter to your collector (environment variables/User Secrets)
 
-Ejemplo de secretos (solo ilustrativo):
+Sample secrets (illustrative only):
 
 ```json
 {
@@ -93,10 +93,10 @@ Ejemplo de secretos (solo ilustrativo):
 
 ## Roadmap
 
-- Añadir `FusionCache` L2 (distribuida) y políticas de caché por caso de uso
-- Ampliar casos de IA y configuración de proveedores
-- Endurecer observabilidad con pipeline OTel completo y dashboards
-- Más ejemplos end-to-end (Users/Gyms, eventos de dominio, tests de integración)
+- Add `FusionCache` L2 (distributed) and per-use-case cache policies
+- Expand AI use cases and provider configuration
+- Harden observability with a complete OTel pipeline and dashboards
+- More end-to-end examples (Users/Gyms, domain events, integration tests)
 
 ---
-Construido con `net10.0` y paquetes preview; sujeto a cambios en futuras versiones.
+Built with `net10.0` and preview packages; subject to change as the platform evolves.
