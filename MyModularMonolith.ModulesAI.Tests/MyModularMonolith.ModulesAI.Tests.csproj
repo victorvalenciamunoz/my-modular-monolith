@@ -1,0 +1,49 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <OutputType>Exe</OutputType>
+    <IsPackable>false</IsPackable>
+
+    <!-- To enable Microsoft.Testing.Platform, uncomment the following line. -->
+    <!-- <UseMicrosoftTestingPlatformRunner>true</UseMicrosoftTestingPlatformRunner> -->
+    <!-- Note: to use Microsoft.Testing.Platform correctly with dotnet test: -->
+    <!-- 1. You must add dotnet.config specifying the test runner to be Microsoft.Testing.Platform -->
+    <!-- 2. You must use .NET 10 SDK or later -->
+    <!-- For more information, see https://aka.ms/dotnet-test/mtp and https://xunit.net/docs/getting-started/v3/microsoft-testing-platform -->
+    <!-- To enable code coverage with Microsoft.Testing.Platform, add a package reference to Microsoft.Testing.Extensions.CodeCoverage -->
+    <!-- https://learn.microsoft.comdotnet/core/testing/microsoft-testing-platform-extensions-code-coverage -->
+  </PropertyGroup>
+
+  <ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="xunit" />
+		<PackageReference Include="xunit.runner.visualstudio" />
+
+		<PackageReference Include="NSubstitute" />
+
+		<PackageReference Include="coverlet.collector" />
+
+		<PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+		<PackageReference Include="FluentAssertions" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="xunit.runner.json" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+	
+	<ItemGroup>	
+		<ProjectReference Include="..\MyModularMonolith.Modules.AI\MyModularMonolith.Modules.AI.csproj" />
+		<ProjectReference Include="..\MyModularMonolith.Modules.Gyms.Contracts\MyModularMonolith.Modules.Gyms.Contracts.csproj" />
+		<ProjectReference Include="..\MyModularMonolith.Shared\MyModularMonolith.Shared.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Using Include="Xunit" />
+		<Using Include="NSubstitute" />
+		<Using Include="FluentAssertions" />
+	</ItemGroup>
+
+</Project>

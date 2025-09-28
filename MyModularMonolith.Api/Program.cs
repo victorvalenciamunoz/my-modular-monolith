@@ -1,12 +1,13 @@
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using MyModularMonolith.Modules.AI;
 using MyModularMonolith.Modules.Gyms;
 using MyModularMonolith.Modules.Gyms.Contracts;
 using MyModularMonolith.Modules.Gyms.Infrastructure;
 using MyModularMonolith.Modules.Users;
-using MyModularMonolith.Modules.Users.Contracts.Commands;
 using MyModularMonolith.Modules.Users.Infrastructure;
 using Serilog;
+using System.Reflection;
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -53,9 +54,13 @@ builder.AddSqlServerDbContext<GymsDbContext>("MyModularMonolith",
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 
-builder.Services.AddUsersModule(builder.Configuration);
-builder.Services.AddGymsModule(builder.Configuration);
+List<Assembly> mediatRAssemblies = [typeof(Program).Assembly];
+
+builder.Services.AddUsersModule(builder.Configuration, mediatRAssemblies);
+builder.Services.AddGymsModule(builder.Configuration, mediatRAssemblies);
 builder.Services.AddAIModule(builder.Configuration);
+
+builder.Services.AddMediatR(mediatRAssemblies.ToArray());
 
 var app = builder.Build();
 
@@ -97,7 +102,7 @@ if (app.Environment.IsDevelopment())
     app.MapPost("/migrate", async (IServiceProvider services) =>
     {
         using var scope = services.CreateScope();
-        
+
         var usersContext = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
         Log.Information("Starting Users module database migrations");
         await usersContext.Database.MigrateAsync();

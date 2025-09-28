@@ -1,8 +1,6 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Routing;
+﻿using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using MyModularMonolith.Modules.Gyms.Contracts.Queries;
 using MyModularMonolith.Modules.Gyms.Domain;
 using MyModularMonolith.Modules.Gyms.Infrastructure;
 using MyModularMonolith.Modules.Gyms.Presentation;
@@ -13,10 +11,9 @@ namespace MyModularMonolith.Modules.Gyms;
 
 public static class GymsModuleExtensions
 {
-    public static IServiceCollection AddGymsModule(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddGymsModule(this IServiceCollection services, IConfiguration configuration, List<System.Reflection.Assembly> mediatRAssemblies)
     {
-        services.AddMediatR(typeof(GymsModuleExtensions).Assembly);
-        services.AddMediatR(typeof(GetGymByIdQuery).Assembly);
+
 
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
 
@@ -27,6 +24,8 @@ public static class GymsModuleExtensions
 
         services.AddScoped<IUnitOfWork>(provider =>
             new UnitOfWork<GymsDbContext>(provider.GetRequiredService<GymsDbContext>()));
+
+        mediatRAssemblies.Add(typeof(GymsModuleExtensions).Assembly);
 
         return services;
     }

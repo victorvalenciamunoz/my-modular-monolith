@@ -1,12 +1,9 @@
-﻿using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using MyModularMonolith.Modules.Gyms.Contracts.Queries;
 using MyModularMonolith.Modules.Users.Application.Services;
 using MyModularMonolith.Modules.Users.Domain;
 using MyModularMonolith.Modules.Users.Endpoints;
@@ -20,13 +17,10 @@ namespace MyModularMonolith.Modules.Users;
 
 public static class UsersModuleExtensions
 {
-    public static IServiceCollection AddUsersModule(this IServiceCollection services, IConfiguration configuration)
+    public static IServiceCollection AddUsersModule(this IServiceCollection services, IConfiguration configuration, List<System.Reflection.Assembly> mediatRAssemblies)
     {
-        services.AddMediatR(typeof(UsersModuleExtensions).Assembly);
-        services.AddMediatR(typeof(GetGymByIdQuery).Assembly);        
-
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
-        
+
         services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
         {
             // Password settings
@@ -77,7 +71,10 @@ public static class UsersModuleExtensions
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IEmailService, EmailService>();
         services.AddSingleton<IUserMetricsService, UserMetricsService>();
-        
+
+
+        mediatRAssemblies.Add(typeof(UsersModuleExtensions).Assembly);
+
         return services;
     }
 

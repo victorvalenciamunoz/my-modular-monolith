@@ -58,7 +58,7 @@ POST {{MyModularMonolith.Api_HostAddress}}/api/auth/login
 Content-Type: {{contentType}}
 
 {
-  "email": "admin1@gym.com",
+  "email": "admin@gym.com",
   "password": "Admin123!"
 }
 
