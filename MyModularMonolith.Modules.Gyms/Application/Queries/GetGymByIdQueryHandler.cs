@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MyModularMonolith.Modules.Gyms.Application.Cache;
 using MyModularMonolith.Modules.Gyms.Configuration;
 using MyModularMonolith.Modules.Gyms.Contracts;
 using MyModularMonolith.Modules.Gyms.Contracts.Queries;
@@ -27,7 +28,7 @@ internal class GetGymByIdQueryHandler : IRequestHandler<GetGymByIdQuery, ErrorOr
         _gymRepository = gymRepository;
         _cacheProvider = cacheProvider;
         _logger = logger;
-        _cache = _cacheProvider.GetCache(GymsModuleExtensions.CACHE_NAME);
+        _cache = _cacheProvider.GetCache(GymsCacheKeys.CacheName);
         _cacheConfig = cacheConfig.Value;
     }
 

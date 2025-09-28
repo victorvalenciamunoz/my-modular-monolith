@@ -27,7 +27,7 @@ internal class GetActiveGymsQueryHandler : IRequestHandler<GetActiveGymsQuery, E
         _gymRepository = gymRepository;        
         _cacheProvider = cacheProvider;
         _logger = logger;
-        _cache = _cacheProvider.GetCache(GymsModuleExtensions.CACHE_NAME);
+        _cache = _cacheProvider.GetCache(GymsCacheKeys.CacheName);
         _cacheConfig = cacheConfig.Value;
     }
 

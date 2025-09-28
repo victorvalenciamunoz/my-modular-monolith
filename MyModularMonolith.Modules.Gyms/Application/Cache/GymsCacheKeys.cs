@@ -2,6 +2,8 @@
 
 internal static class GymsCacheKeys
 {
+    public const string CacheName = "GymsCache";
+
     /// <summary>
     /// Cache key for the list of active gyms
     /// </summary>

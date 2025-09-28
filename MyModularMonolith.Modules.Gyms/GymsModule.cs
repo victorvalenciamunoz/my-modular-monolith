@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using MyModularMonolith.Modules.Gyms.Application.Cache;
 using MyModularMonolith.Modules.Gyms.Configuration;
 using MyModularMonolith.Modules.Gyms.Domain;
 using MyModularMonolith.Modules.Gyms.Infrastructure;
@@ -13,12 +14,10 @@ namespace MyModularMonolith.Modules.Gyms;
 
 public static class GymsModuleExtensions
 {
-    public const string CACHE_NAME = "GymsCache";
-
     public static IServiceCollection AddGymsModule(this IServiceCollection services, IConfiguration configuration, List<System.Reflection.Assembly> mediatRAssemblies)
     {
         services.AddMemoryCache();
-        services.AddFusionCache(CACHE_NAME)
+        services.AddFusionCache(GymsCacheKeys.CacheName)
             .WithDefaultEntryOptions(options =>
             {
                 var cacheSection = configuration.GetSection("Modules:Gyms:Cache");

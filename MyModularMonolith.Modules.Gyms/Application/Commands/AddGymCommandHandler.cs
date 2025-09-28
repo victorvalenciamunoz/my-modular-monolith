@@ -41,7 +41,7 @@ internal class AddGymCommandHandler : IRequestHandler<AddGymCommand, ErrorOr<Gym
         _cacheProvider = cacheProvider;
         _cacheConfig = cacheConfig.Value;
         _logger = logger;
-        _cache = _cacheProvider.GetCache(GymsModuleExtensions.CACHE_NAME);
+        _cache = _cacheProvider.GetCache(GymsCacheKeys.CacheName);
     }
     public async Task<ErrorOr<GymDto>> Handle(AddGymCommand request, CancellationToken cancellationToken)
     {
