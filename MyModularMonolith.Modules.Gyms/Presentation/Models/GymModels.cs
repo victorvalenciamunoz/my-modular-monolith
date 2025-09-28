@@ -1,4 +1,5 @@
 ﻿using MyModularMonolith.Modules.Gyms.Contracts;
+using System.ComponentModel.DataAnnotations;
 
 namespace MyModularMonolith.Modules.Gyms.Presentation.Models
 {
@@ -23,5 +24,13 @@ namespace MyModularMonolith.Modules.Gyms.Presentation.Models
                 dtos.Select(GymResponse.FromDto).ToList(),
                 dtos.Count,
                 DateTime.UtcNow);
+    }
+
+    public record AddGymRequest
+    {
+        [Required(ErrorMessage = "Gym name is required")]
+        [MinLength(2, ErrorMessage = "Gym name must be at least 2 characters long")]
+        [MaxLength(100, ErrorMessage = "Gym name must not exceed 100 characters")]
+        public required string Name { get; init; }
     }
 }

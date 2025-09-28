@@ -17,35 +17,65 @@ Accept: application/json
 
 ###
 
+### 3. Add New Gym
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms
+Content-Type: {{contentType}}
+
+{
+  "name": "Grand Gym"
+}
+
+###
+
+### 4. Add New Gym - Premium Location
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms
+Content-Type: {{contentType}}
+
+{
+  "name": "Fitness Premium Center"
+}
+
+###
+
+### 5. Add New Gym - Downtown Location
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms
+Content-Type: {{contentType}}
+
+{
+  "name": "Downtown Fitness Hub"
+}
+
+###
+
 # ===========================================
 # GYMS MODULE - PRODUCTS ENDPOINTS
 # ===========================================
 
-### 3. Get All Products
+### 6. Get All Products
 GET {{MyModularMonolith.Api_HostAddress}}/api/products
 Accept: application/json
 
 ###
 
-### 4. Get Product by ID (Acceso Sala Musculación)
+### 7. Get Product by ID (Acceso Sala Musculación)
 GET {{MyModularMonolith.Api_HostAddress}}/api/products/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
 Accept: application/json
 
 ###
 
-### 5. Get Product by ID (Clase de Spinning)
+### 8. Get Product by ID (Clase de Spinning)
 GET {{MyModularMonolith.Api_HostAddress}}/api/products/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb
 Accept: application/json
 
 ###
 
-### 6. Get Product by ID (Entrenamiento Personal)
+### 9. Get Product by ID (Entrenamiento Personal)
 GET {{MyModularMonolith.Api_HostAddress}}/api/products/cccccccc-cccc-cccc-cccc-cccccccccccc
 Accept: application/json
 
 ###
 
-### 7. Create Product - Acceso Premium
+### 10. Create Product - Acceso Premium
 POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
@@ -60,7 +90,7 @@ Content-Type: {{contentType}}
 
 ###
 
-### 8. Create Product - Clase de Yoga
+### 11. Create Product - Clase de Yoga
 POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
@@ -75,7 +105,7 @@ Content-Type: {{contentType}}
 
 ###
 
-### 9. Create Product - Entrenamiento Personal Premium
+### 12. Create Product - Entrenamiento Personal Premium
 POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
@@ -90,7 +120,7 @@ Content-Type: {{contentType}}
 
 ###
 
-### 10. Create Product - Sesión de Fisioterapia
+### 13. Create Product - Sesión de Fisioterapia
 POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
@@ -105,7 +135,7 @@ Content-Type: {{contentType}}
 
 ###
 
-### 11. Create Product - Consulta Nutricional Premium
+### 14. Create Product - Consulta Nutricional Premium
 POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
@@ -120,7 +150,7 @@ Content-Type: {{contentType}}
 
 ###
 
-### 12. Create Product - Taquilla Premium
+### 15. Create Product - Taquilla Premium
 POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
@@ -139,25 +169,25 @@ Content-Type: {{contentType}}
 # GYMS MODULE - GYM PRODUCTS ENDPOINTS
 # ===========================================
 
-### 13. Get Products for Gym Central (all active products)
+### 16. Get Products for Gym Central (all active products)
 GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333/products
 Accept: application/json
 
 ###
 
-### 14. Get Products for Gym Norte (including inactive)
+### 17. Get Products for Gym Norte (including inactive)
 GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/44444444-4444-4444-4444-444444444444/products?includeInactive=true
 Accept: application/json
 
 ###
 
-### 15. Get Products for Gym Sur
+### 18. Get Products for Gym Sur
 GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/55555555-5555-5555-5555-555555555555/products
 Accept: application/json
 
 ###
 
-### 16. Add Gym Access Product to Gym Sur (basic configuration)
+### 19. Add Gym Access Product to Gym Sur (basic configuration)
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/55555555-5555-5555-5555-555555555555/products
 Content-Type: {{contentType}}
 
@@ -172,7 +202,7 @@ Content-Type: {{contentType}}
 
 ###
 
-### 17. Add Spinning Class to Gym Sur (with full configuration)
+### 20. Add Spinning Class to Gym Sur (with full configuration)
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/55555555-5555-5555-5555-555555555555/products
 Content-Type: {{contentType}}
 
@@ -193,7 +223,7 @@ Content-Type: {{contentType}}
 
 ###
 
-### 18. Add Personal Training to Gym Central
+### 21. Add Personal Training to Gym Central
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333/products
 Content-Type: {{contentType}}
 
@@ -212,7 +242,7 @@ Content-Type: {{contentType}}
 
 ###
 
-### 19. Add Nutrition Consultation to Gym Norte
+### 22. Add Nutrition Consultation to Gym Norte
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/44444444-4444-4444-4444-444444444444/products
 Content-Type: {{contentType}}
 
@@ -231,7 +261,7 @@ Content-Type: {{contentType}}
 
 ###
 
-### 20. Add Zumba Class to Gym Sur (with discount)
+### 23. Add Zumba Class to Gym Sur (with discount)
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/55555555-5555-5555-5555-555555555555/products
 Content-Type: {{contentType}}
 
@@ -256,7 +286,37 @@ Content-Type: {{contentType}}
 # GYMS ERROR SCENARIOS FOR TESTING
 # ===========================================
 
-### 21. Create Product with Negative Price
+### 24. Create Gym with Empty Name (Validation Error)
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms
+Content-Type: {{contentType}}
+
+{
+  "name": ""
+}
+
+###
+
+### 25. Create Gym with Duplicate Name (Conflict Error)
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms
+Content-Type: {{contentType}}
+
+{
+  "name": "Gym Central"
+}
+
+###
+
+### 26. Create Gym with Very Long Name (Validation Error)
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms
+Content-Type: {{contentType}}
+
+{
+  "name": "This is a very long gym name that exceeds the maximum allowed length of 100 characters and should cause a validation error when trying to create it"
+}
+
+###
+
+### 27. Create Product with Negative Price
 POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
@@ -271,7 +331,7 @@ Content-Type: {{contentType}}
 
 ###
 
-### 22. Create Product with Empty Name
+### 28. Create Product with Empty Name
 POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
@@ -286,13 +346,13 @@ Content-Type: {{contentType}}
 
 ###
 
-### 23. Get Product with Non-existent ID
+### 29. Get Product with Non-existent ID
 GET {{MyModularMonolith.Api_HostAddress}}/api/products/99999999-9999-9999-9999-999999999999
 Accept: application/json
 
 ###
 
-### 24. Add Product to Non-existent Gym
+### 30. Add Product to Non-existent Gym
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/99999999-9999-9999-9999-999999999999/products
 Content-Type: {{contentType}}
 
@@ -304,7 +364,7 @@ Content-Type: {{contentType}}
 
 ###
 
-### 25. Add Non-existent Product to Gym
+### 31. Add Non-existent Product to Gym
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333/products
 Content-Type: {{contentType}}
 
@@ -316,7 +376,7 @@ Content-Type: {{contentType}}
 
 ###
 
-### 26. Add Same Product to Gym Twice (should fail with conflict)
+### 32. Add Same Product to Gym Twice (should fail with conflict)
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333/products
 Content-Type: {{contentType}}
 
@@ -328,13 +388,13 @@ Content-Type: {{contentType}}
 
 ###
 
-### 27. Get Products for Non-existent Gym
+### 33. Get Products for Non-existent Gym
 GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/99999999-9999-9999-9999-999999999999/products
 Accept: application/json
 
 ###
 
-### 28. Add Product with Invalid Discount Percentage (>100%)
+### 34. Add Product with Invalid Discount Percentage (>100%)
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333/products
 Content-Type: {{contentType}}
 
@@ -347,7 +407,7 @@ Content-Type: {{contentType}}
 
 ###
 
-### 29. Add Product with Invalid Capacity (min > max)
+### 35. Add Product with Invalid Capacity (min > max)
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333/products
 Content-Type: {{contentType}}
 

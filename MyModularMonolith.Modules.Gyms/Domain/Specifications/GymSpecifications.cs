@@ -19,6 +19,16 @@ public sealed class GetGymByIdSpec : Specification<Gym>
     }
 }
 
+public sealed class GetGymByNameSpec : Specification<Gym>
+{
+    public GetGymByNameSpec(string gymName, bool includeInactiveProducts = false)
+    {
+        Query.Where(g => g.Name.ToUpper() == gymName.ToUpper())
+             .Include(g => g.GymProducts.Where(gp => includeInactiveProducts || gp.IsActive))
+             .ThenInclude(gp => gp.Product);
+    }
+}
+
 public sealed class GetGymsWithProductsSpec : Specification<Gym>
 {
     public GetGymsWithProductsSpec(bool includeInactive = false)
@@ -44,3 +54,4 @@ public sealed class GetGymByIdWithProductsSpec : Specification<Gym>
              .ThenInclude(gp => gp.Product);
     }
 }
+
