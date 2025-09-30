@@ -24,7 +24,7 @@ public class ReservationAgentTests
         // Arrange
         var slotData = CreateTestSlotData();
         _mockAIService.GenerateResponseAsync(Arg.Any<string>(), Arg.Any<CancellationToken>())
-                     .Returns("AI analysis suggests optimal capacity management with selective confirmation strategy.");
+                     .Returns("AI analysis suggests optimal capacity management with selective confirmation strategy");
 
         // Act
         var result = await _agent.AnalyzeSlotReservationsAsync(slotData);
