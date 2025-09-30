@@ -1,40 +1,40 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 18
-VisualStudioVersion = 18.0.11012.119
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.36426.23
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
 		Directory.Packages.props = Directory.Packages.props
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Shared", "MyModularMonolith.Shared\MyModularMonolith.Shared.csproj", "{BCA3C8F8-5DD0-4A92-A831-8CA1CD57207D}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Shared", "src\MyModularMonolith.Shared\MyModularMonolith.Shared.csproj", "{BCA3C8F8-5DD0-4A92-A831-8CA1CD57207D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Api", "MyModularMonolith.Api\MyModularMonolith.Api.csproj", "{FFB7CA7D-3453-42A4-B166-CD5012BF3577}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Api", "src\MyModularMonolith.Api\MyModularMonolith.Api.csproj", "{FFB7CA7D-3453-42A4-B166-CD5012BF3577}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Modules.Users", "MyModularMonolith.Modules.Users\MyModularMonolith.Modules.Users.csproj", "{ECB5CDE7-8AE9-4061-A497-D42A6CFD9C37}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Modules.Users", "src\MyModularMonolith.Modules.Users\MyModularMonolith.Modules.Users.csproj", "{ECB5CDE7-8AE9-4061-A497-D42A6CFD9C37}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "users", "users", "{D6752296-5112-4773-B4D9-24EF5E6A59B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Modules.Users.Contracts", "MyModularMonolith.Modules.Users.Contracts\MyModularMonolith.Modules.Users.Contracts.csproj", "{FFFC6B9A-1BF9-4144-8C98-5CEF26154EA2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Modules.Users.Contracts", "src\MyModularMonolith.Modules.Users.Contracts\MyModularMonolith.Modules.Users.Contracts.csproj", "{FFFC6B9A-1BF9-4144-8C98-5CEF26154EA2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "gyms", "gyms", "{891AC9D7-434E-47D7-81F4-73E6C8A2BD0B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Modules.Gyms.Contracts", "MyModularMonolith.Modules.Gyms.Contracts\MyModularMonolith.Modules.Gyms.Contracts.csproj", "{8F42CE6A-99B8-44F4-8750-77EA3F16F2CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Modules.Gyms.Contracts", "src\MyModularMonolith.Modules.Gyms.Contracts\MyModularMonolith.Modules.Gyms.Contracts.csproj", "{8F42CE6A-99B8-44F4-8750-77EA3F16F2CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Modules.Gyms", "MyModularMonolith.Modules.Gyms\MyModularMonolith.Modules.Gyms.csproj", "{2CD76EA1-CAB5-4685-8E84-B985EB873B1C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Modules.Gyms", "src\MyModularMonolith.Modules.Gyms\MyModularMonolith.Modules.Gyms.csproj", "{2CD76EA1-CAB5-4685-8E84-B985EB873B1C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "aiagent", "aiagent", "{5D041B67-9173-4BEA-B073-99CFE306EF9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Modules.AI", "MyModularMonolith.Modules.AI\MyModularMonolith.Modules.AI.csproj", "{3929D7BB-609A-4DBE-A511-80647C3DAED8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.Modules.AI", "src\MyModularMonolith.Modules.AI\MyModularMonolith.Modules.AI.csproj", "{3929D7BB-609A-4DBE-A511-80647C3DAED8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "aspire", "aspire", "{FFF7F32E-0912-4DC6-8B75-17F3D3571DAB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.AppHost", "MyModularMonolith.AppHost\MyModularMonolith.AppHost.csproj", "{D24FFC04-49F5-4C2A-B205-47B91BDAD0DC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.AppHost", "src\MyModularMonolith.AppHost\MyModularMonolith.AppHost.csproj", "{D24FFC04-49F5-4C2A-B205-47B91BDAD0DC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.ServiceDefaults", "MyModularMonolith.ServiceDefaults\MyModularMonolith.ServiceDefaults.csproj", "{9595AB5D-7FE1-4F51-A606-D76392A58627}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.ServiceDefaults", "src\MyModularMonolith.ServiceDefaults\MyModularMonolith.ServiceDefaults.csproj", "{9595AB5D-7FE1-4F51-A606-D76392A58627}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.ModulesAI.Tests", "MyModularMonolith.ModulesAI.Tests\MyModularMonolith.ModulesAI.Tests.csproj", "{4B90214D-3773-4157-B440-4B96451202E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.ModulesAI.Tests", "src\MyModularMonolith.ModulesAI.Tests\MyModularMonolith.ModulesAI.Tests.csproj", "{4B90214D-3773-4157-B440-4B96451202E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
