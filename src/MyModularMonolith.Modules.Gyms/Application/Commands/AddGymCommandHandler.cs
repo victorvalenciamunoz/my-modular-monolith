@@ -68,7 +68,7 @@ internal class AddGymCommandHandler : IRequestHandler<AddGymCommand, ErrorOr<Gym
                 TimeSpan.FromMinutes(_cacheConfig.Durations.Gym),
                 cancellationToken);
                         
-            await _cache.RemoveAsync(GymsCacheKeys.ActiveGymsList, token: cancellationToken);
+            await _cache.ExpireAsync(GymsCacheKeys.ActiveGymsList, token: cancellationToken);
 
             _logger.LogInformation("Created new gym with ID {GymId} and name '{GymName}'", gym.Id, gym.Name);
 
