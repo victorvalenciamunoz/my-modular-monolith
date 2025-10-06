@@ -8,20 +8,32 @@ namespace MyModularMonolith.Modules.Users.Domain;
 public class ApplicationUser : IdentityUser<Guid>
 {
     public string FirstName { get; private set; } = string.Empty;
+    
     public string LastName { get; private set; } = string.Empty;
+    
     public DateTime CreatedAt { get; private set; }
+    
     public DateTime? UpdatedAt { get; private set; }
+    
     public bool IsActive { get; private set; } = true;
 
     public Guid? HomeGymId { get; private set; }
+    
     public string? HomeGymName { get; set; }
+    
     public DateTime? RegistrationDate { get; private set; }
+    
+    public MembershipLevel MembershipLevel { get; private set; } = MembershipLevel.Standard;
 
+    
     public bool HasTemporaryPassword { get; private set; } = false;
+    
     public DateTime? TemporaryPasswordCreatedAt { get; private set; }
+    
     public bool MustChangePassword { get; private set; } = false;
 
     private readonly List<IDomainEvent> _domainEvents = [];
+    
     public IReadOnlyCollection<IDomainEvent> DomainEvents => _domainEvents.AsReadOnly();
 
     public ApplicationUser() : base()
@@ -57,6 +69,20 @@ public class ApplicationUser : IdentityUser<Guid>
                                                     homeGymId, homeGymName, hasTemporaryPassword));
     }
 
+    public void UpdateMembershipLevel(MembershipLevel membershipLevel, DateTime updatedAt)
+    {
+        if (MembershipLevel == membershipLevel) return;
+
+        var oldMembershipLevel = MembershipLevel;
+        MembershipLevel = membershipLevel;
+        UpdatedAt = updatedAt;
+
+        RaiseDomainEvent(new UserMembershipLevelChangedDomainEvent(Id,
+                                                             oldMembershipLevel,
+                                                             membershipLevel,
+                                                             updatedAt));
+    }
+
     public void PasswordChanged(DateTime updatedAt)
     {
         UpdatedAt = updatedAt;
@@ -75,6 +101,7 @@ public class ApplicationUser : IdentityUser<Guid>
         
         RaiseDomainEvent(new UserPasswordUpdatedDomainEvent(Id, updatedAt));
     }
+    
     public void RequirePasswordChange(DateTime updatedAt)
     {
         MustChangePassword = true;

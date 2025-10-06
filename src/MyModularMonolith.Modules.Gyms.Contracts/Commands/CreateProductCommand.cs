@@ -1,5 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
+using MyModularMonolith.Shared.Domain;
 
 namespace MyModularMonolith.Modules.Gyms.Contracts.Commands;
 
@@ -9,4 +10,5 @@ public record CreateProductCommand(
     decimal BasePrice,
     bool RequiresSchedule,
     bool RequiresInstructor,
-    bool HasCapacityLimits) : IRequest<ErrorOr<ProductDto>>;
+    bool HasCapacityLimits,
+    MembershipLevel MembershipLevel) : IRequest<ErrorOr<ProductDto>>;

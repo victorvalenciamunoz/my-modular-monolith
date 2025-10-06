@@ -16,7 +16,8 @@ internal static class ProductMapper
             product.HasCapacityLimits,
             product.IsActive,
             product.CreatedAt,
-            product.UpdatedAt);
+            product.UpdatedAt,
+            product.MinimumRequiredMembership);
 
     public static GymProductDto ToDto(GymProduct gymProduct) =>
         new(

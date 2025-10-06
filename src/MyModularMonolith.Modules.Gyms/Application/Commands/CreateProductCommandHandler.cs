@@ -1,10 +1,10 @@
 ﻿using ErrorOr;
 using MediatR;
-using MyModularMonolith.Modules.Gyms.Contracts;
-using MyModularMonolith.Modules.Gyms.Domain;
 using MyModularMonolith.Modules.Gyms.Application.Mappers;
-using MyModularMonolith.Shared.Application;
+using MyModularMonolith.Modules.Gyms.Contracts;
 using MyModularMonolith.Modules.Gyms.Contracts.Commands;
+using MyModularMonolith.Modules.Gyms.Domain;
+using MyModularMonolith.Shared.Application;
 
 namespace MyModularMonolith.Modules.Gyms.Application.Commands;
 
@@ -28,12 +28,13 @@ internal class CreateProductCommandHandler : IRequestHandler<CreateProductComman
     {
         var product = new Product(
             request.Name,
-            request.Description,            
+            request.Description,
             request.BasePrice,
             request.RequiresSchedule,
             request.RequiresInstructor,
             request.HasCapacityLimits,
-            _dateTimeProvider.UtcNow);
+            _dateTimeProvider.UtcNow,
+            request.MembershipLevel);
 
         await _productRepository.AddAsync(product, cancellationToken);
         await _unitOfWork.SaveChangesAsync(cancellationToken);

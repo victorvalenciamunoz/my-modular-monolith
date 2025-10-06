@@ -36,21 +36,53 @@ Content-Type: {{contentType}}
 
 ###
 
-### 3. Register Gym User with Custom Password
+### 3. Register Standard User with Custom Password
 POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
 Content-Type: {{contentType}}
 
 {
-  "email": "victor_martinez@gym.com",
+  "email": "standard@gym.com",
   "firstName": "Víctor",
   "lastName": "Sport",
-  "password": "User123!",
+  "password": "Standard123!",
   "role": "User",
   "homeGymId": "44444444-4444-4444-4444-444444444444",
   "homeGymName": "Gym Norte",
   "generateTemporaryPassword": false
 }
 
+###
+
+### Register Premium User with Custom Password
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "premium@gym.com",
+  "firstName": "Víctor",
+  "lastName": "Premium",
+  "password": "Premium123!",
+  "role": "User",
+  "homeGymId": "44444444-4444-4444-4444-444444444444",
+  "homeGymName": "Gym Norte",
+  "generateTemporaryPassword": false
+}
+###
+
+### Register VIP User with Custom Password
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/register
+Content-Type: {{contentType}}
+
+{
+  "email": "vip@gym.com",
+  "firstName": "Víctor",
+  "lastName": "VIP",
+  "password": "Vip123!",
+  "role": "User",
+  "homeGymId": "44444444-4444-4444-4444-444444444444",
+  "homeGymName": "Gym Norte",
+  "generateTemporaryPassword": false
+}
 ###
 
 ### 4. Login with SuperAdmin

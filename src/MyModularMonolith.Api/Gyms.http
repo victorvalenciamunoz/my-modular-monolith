@@ -96,7 +96,7 @@ Accept: application/json
 
 ###
 
-### 10. Create Product - Acceso Premium
+### 10. Create Product - Acceso Premium (Standard membership)
 POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
@@ -106,12 +106,13 @@ Content-Type: {{contentType}}
   "basePrice": 55.00,
   "requiresSchedule": false,
   "requiresInstructor": false,
-  "hasCapacityLimits": true
+  "hasCapacityLimits": true,
+  "minimumRequiredMembership": 1
 }
 
 ###
 
-### 11. Create Product - Clase de Yoga
+### 11. Create Product - Clase de Yoga (Premium membership)
 POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
@@ -121,12 +122,13 @@ Content-Type: {{contentType}}
   "basePrice": 18.00,
   "requiresSchedule": true,
   "requiresInstructor": true,
-  "hasCapacityLimits": true
+  "hasCapacityLimits": true,
+  "minimumRequiredMembership": 2
 }
 
 ###
 
-### 12. Create Product - Entrenamiento Personal Premium
+### 12. Create Product - Entrenamiento Personal Premium (Premium membership)
 POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
@@ -136,12 +138,13 @@ Content-Type: {{contentType}}
   "basePrice": 65.00,
   "requiresSchedule": true,
   "requiresInstructor": true,
-  "hasCapacityLimits": false
+  "hasCapacityLimits": false,
+  "minimumRequiredMembership": 2
 }
 
 ###
 
-### 13. Create Product - Sesión de Fisioterapia
+### 13. Create Product - Sesión de Fisioterapia (VIP membership)
 POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
@@ -151,12 +154,13 @@ Content-Type: {{contentType}}
   "basePrice": 45.00,
   "requiresSchedule": true,
   "requiresInstructor": true,
-  "hasCapacityLimits": false
+  "hasCapacityLimits": false,
+  "minimumRequiredMembership": 3
 }
 
 ###
 
-### 14. Create Product - Consulta Nutricional Premium
+### 14. Create Product - Consulta Nutricional Premium (VIP membership)
 POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
@@ -166,13 +170,14 @@ Content-Type: {{contentType}}
   "basePrice": 60.00,
   "requiresSchedule": true,
   "requiresInstructor": true,
-  "hasCapacityLimits": false
+  "hasCapacityLimits": false,
+  "minimumRequiredMembership": 3
 }
 
 ###
 
-### 15. Create Product - Taquilla Premium
-POST {{MyModularMonolith.Api_HostAddress}>/api/products
+### 15. Create Product - Taquilla Premium (Standard membership)
+POST {{MyModularMonolith.Api_HostAddress}}/api/products
 Content-Type: {{contentType}}
 
 {
@@ -181,8 +186,83 @@ Content-Type: {{contentType}}
   "basePrice": 8.00,
   "requiresSchedule": false,
   "requiresInstructor": false,
-  "hasCapacityLimits": false
+  "hasCapacityLimits": false,
+  "minimumRequiredMembership": 1
 }
+
+###
+
+# ===========================================
+# NEW: UPDATE EXISTING PRODUCTS
+# ===========================================
+
+### 38. Update Product - Change Standard product details
+PUT {{MyModularMonolith.Api_HostAddress}}/api/products/aaaaaaaa-aaaa-aaaa-aaaa-aaaaaaaaaaaa
+Content-Type: {{contentType}}
+
+{
+  "name": "Acceso Sala Musculación",
+  "description": "Acceso completo a sala de musculación con equipamiento actualizado",
+  "basePrice": 30.00,
+  "requiresSchedule": false,
+  "requiresInstructor": false,
+  "hasCapacityLimits": true,
+  "minimumRequiredMembership": 1
+}
+
+###
+
+### 39. Update Product - Change Premium product to VIP
+PUT {{MyModularMonolith.Api_HostAddress}}/api/products/bbbbbbbb-bbbb-bbbb-bbbb-bbbbbbbbbbbb
+Content-Type: {{contentType}}
+
+{
+  "name": "Clase de Spinning Premium",
+  "description": "Clase de spinning con entrenador personal y seguimiento individualizado",
+  "basePrice": 25.00,
+  "requiresSchedule": true,
+  "requiresInstructor": true,
+  "hasCapacityLimits": true,
+  "minimumRequiredMembership": 3
+}
+
+###
+
+### 40. Update Product - Change VIP product to Standard
+PUT {{MyModularMonolith.Api_HostAddress}}/api/products/cccccccc-cccc-cccc-cccc-cccccccccccc
+Content-Type: {{contentType}}
+
+{
+  "name": "Entrenamiento Personal Básico",
+  "description": "Sesión básica con entrenador certificado",
+  "basePrice": 40.00,
+  "requiresSchedule": true,
+  "requiresInstructor": true,
+  "hasCapacityLimits": false,
+  "minimumRequiredMembership": 1
+}
+
+###
+
+# ===========================================
+# NEW: FILTER PRODUCTS BY MEMBERSHIP LEVEL
+# ===========================================
+
+### 41. Get Products Available for Standard Membership
+GET {{MyModularMonolith.Api_HostAddress}}/api/products?membershipLevel=1
+Accept: application/json
+
+###
+
+### 42. Get Products Available for Premium Membership
+GET {{MyModularMonolith.Api_HostAddress}}/api/products?membershipLevel=2
+Accept: application/json
+
+###
+
+### 43. Get Products Available for VIP Membership
+GET {{MyModularMonolith.Api_HostAddress}}/api/products?membershipLevel=3
+Accept: application/json
 
 ###
 
@@ -304,6 +384,28 @@ Content-Type: {{contentType}}
 ###
 
 # ===========================================
+# NEW: FILTER GYM PRODUCTS BY MEMBERSHIP LEVEL
+# ===========================================
+
+### 44. Get Products for Gym Central filtered by Standard membership
+GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333/products?membershipLevel=1
+Accept: application/json
+
+###
+
+### 45. Get Products for Gym Norte filtered by Premium membership
+GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/44444444-4444-4444-4444-444444444444/products?membershipLevel=2
+Accept: application/json
+
+###
+
+### 46. Get Products for Gym Sur filtered by VIP membership
+GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/55555555-5555-5555-5555-555555555555/products?membershipLevel=3
+Accept: application/json
+
+###
+
+# ===========================================
 # GYMS ERROR SCENARIOS FOR TESTING
 # ===========================================
 
@@ -350,7 +452,8 @@ Content-Type: {{contentType}}
   "basePrice": -10.00,
   "requiresSchedule": false,
   "requiresInstructor": false,
-  "hasCapacityLimits": false
+  "hasCapacityLimits": false,
+  "minimumRequiredMembership": 1
 }
 
 ###
@@ -365,7 +468,8 @@ Content-Type: {{contentType}}
   "basePrice": 25.00,
   "requiresSchedule": false,
   "requiresInstructor": false,
-  "hasCapacityLimits": false
+  "hasCapacityLimits": false,
+  "minimumRequiredMembership": 1
 }
 
 ###
@@ -441,6 +545,22 @@ Content-Type: {{contentType}}
   "price": 15.00,
   "minCapacity": 30,
   "maxCapacity": 10
+}
+
+###
+
+### 47. Create Product with Invalid Membership Level (outside enum range)
+POST {{MyModularMonolith.Api_HostAddress}}/api/products
+Content-Type: {{contentType}}
+
+{
+  "name": "Invalid Membership Product",
+  "description": "Product with invalid membership level",
+  "basePrice": 20.00,
+  "requiresSchedule": false,
+  "requiresInstructor": false,
+  "hasCapacityLimits": false,
+  "minimumRequiredMembership": 5
 }
 
 ###

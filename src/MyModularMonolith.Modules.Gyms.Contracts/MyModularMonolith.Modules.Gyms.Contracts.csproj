@@ -10,4 +10,7 @@
     <PackageReference Include="MediatR" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MyModularMonolith.Shared\MyModularMonolith.Shared.csproj" />
+  </ItemGroup>
 </Project>
