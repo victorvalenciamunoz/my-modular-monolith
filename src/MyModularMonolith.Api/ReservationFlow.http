@@ -1,5 +1,205 @@
-@MyModularMonolith.Api_HostAddress = http://localhost:5182
+@MyModularMonolith.Api_HostAddress = https://localhost:7014
 @contentType = application/json
+
+# ===========================================
+# 1. AUTHENTICATION - GET TOKENS
+# ===========================================
+
+### Login as Standard User
+# @name loginStandard
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "standard@gym.com",
+  "password": "Standard123!"
+}
+
+###
+@tokenStandard = {{loginStandard.response.body.$.accessToken}}
+@standardUserId = {{loginStandard.response.body.$.userId}}
+
+### Login as Premium User
+# @name loginPremium
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "premium@gym.com",
+  "password": "Premium123!"
+}
+
+###
+@tokenPremium = {{loginPremium.response.body.$.accessToken}}
+
+### Login as VIP User
+# @name loginVIP
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "vip@gym.com",
+  "password": "Vip123!"
+}
+
+###
+@tokenVIP = {{loginVIP.response.body.$.accessToken}}
+
+# ===========================================
+# 3. TEST MEMBERSHIPS ACCESS PERMISSIONS
+# ===========================================
+
+### TEST 1: Standard user reserves standard product (Should SUCCEED)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+Authorization: Bearer {{tokenStandard}}
+
+{
+  "userId": "{{standardUserId}}",
+  "gymProductId": "22222222-2222-2222-AAAA-222222222222",
+  "reservationDateTime": "2025-12-31T10:00:00Z",
+  "userNotes": "Standard user accessing standard product"
+}
+
+###
+
+### TEST 2: Standard user reserves premium product (Should FAIL)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+Authorization: Bearer {{tokenStandard}}
+
+{
+  "userId": "{{standardUserId}}",
+  "gymProductId": "11111111-1111-1111-BBBB-111111111111",
+  "reservationDateTime": "2025-12-31T10:00:00Z",
+  "userNotes": "Standard user attempting to access premium product"
+}
+
+###
+
+### TEST 3: Standard user reserves VIP product (Should FAIL)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+Authorization: Bearer {{tokenStandard}}
+
+{
+  "userId": "{{standardUserId}}",
+  "gymProductId": "{{vipGymProductId}}",
+  "reservationDateTime": "2025-12-31T10:00:00Z",
+  "userNotes": "Standard user attempting to access VIP product"
+}
+
+###
+
+### TEST 4: Premium user reserves standard product (Should SUCCEED)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+Authorization: Bearer {{tokenPremium}}
+
+{
+  "userId": "{{premiumUserId}}",
+  "gymProductId": "{{standardGymProductId}}",
+  "reservationDateTime": "2025-12-31T11:00:00Z",
+  "userNotes": "Premium user accessing standard product"
+}
+
+###
+
+### TEST 5: Premium user reserves premium product (Should SUCCEED)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+Authorization: Bearer {{tokenPremium}}
+
+{
+  "userId": "{{premiumUserId}}",
+  "gymProductId": "{{premiumGymProductId}}",
+  "reservationDateTime": "2025-12-31T10:00:00Z",
+  "userNotes": "Premium user accessing premium product"
+}
+
+###
+
+### TEST 6: Premium user reserves VIP product (Should FAIL)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+Authorization: Bearer {{tokenPremium}}
+
+{
+  "userId": "{{premiumUserId}}",
+  "gymProductId": "{{vipGymProductId}}",
+  "reservationDateTime": "2025-12-31T10:00:00Z",
+  "userNotes": "Premium user attempting to access VIP product"
+}
+
+###
+
+### TEST 7: VIP user reserves standard product (Should SUCCEED)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+Authorization: Bearer {{tokenVIP}}
+
+{
+  "userId": "{{vipUserId}}",
+  "gymProductId": "{{standardGymProductId}}",
+  "reservationDateTime": "2025-12-31T12:00:00Z",
+  "userNotes": "VIP user accessing standard product"
+}
+
+###
+
+### TEST 8: VIP user reserves premium product (Should SUCCEED)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+Authorization: Bearer {{tokenVIP}}
+
+{
+  "userId": "{{vipUserId}}",
+  "gymProductId": "{{premiumGymProductId}}",
+  "reservationDateTime": "2025-12-31T18:00:00Z",
+  "userNotes": "VIP user accessing premium product"
+}
+
+###
+
+### TEST 9: VIP user reserves VIP product (Should SUCCEED)
+POST {{MyModularMonolith.Api_HostAddress}}/api/reservations
+Content-Type: {{contentType}}
+Authorization: Bearer {{tokenVIP}}
+
+{
+  "userId": "{{vipUserId}}",
+  "gymProductId": "{{vipGymProductId}}",
+  "reservationDateTime": "2025-12-31T10:00:00Z",
+  "userNotes": "VIP user accessing VIP product"
+}
+
+###
+
+# ===========================================
+# 4. VERIFY RESERVATIONS BY USER
+# ===========================================
+
+### Get Standard user reservations (Should show only standard product)
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/user/{{standardUserId}}
+Authorization: Bearer {{tokenStandard}}
+
+###
+
+### Get Premium user reservations (Should show standard and premium products)
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/user/{{premiumUserId}}
+Authorization: Bearer {{tokenPremium}}
+
+###
+
+### Get VIP user reservations (Should show all products)
+GET {{MyModularMonolith.Api_HostAddress}}/api/reservations/user/{{vipUserId}}
+Authorization: Bearer {{tokenVIP}}
+
+###
+
+# ===========================================
+# ORIGINAL RESERVATIONFLOW.HTTP CONTENT BELOW
+# ===========================================
 
 # ===========================================
 # COMPLETE WORKFLOW: SPINNING CLASS SETUP

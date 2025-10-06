@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using MyModularMonolith.Modules.Gyms.Infrastructure;
 
@@ -11,9 +12,11 @@ using MyModularMonolith.Modules.Gyms.Infrastructure;
 namespace MyModularMonolith.Modules.Gyms.Infrastructure.Migrations
 {
     [DbContext(typeof(GymsDbContext))]
-    partial class GymsDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251006130328_AddMembershipLevel")]
+    partial class AddMembershipLevel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

@@ -1,4 +1,6 @@
-﻿namespace MyModularMonolith.Modules.Gyms.Contracts;
+﻿using MyModularMonolith.Shared.Domain;
+
+namespace MyModularMonolith.Modules.Gyms.Contracts;
 
 public record ProductDto(
     Guid Id,
@@ -10,7 +12,8 @@ public record ProductDto(
     bool HasCapacityLimits,
     bool IsActive,
     DateTime CreatedAt,
-    DateTime? UpdatedAt);
+    DateTime? UpdatedAt,
+    MembershipLevel MinimumRequiredMembership);
 
 public record GymProductDto(
     Guid Id,

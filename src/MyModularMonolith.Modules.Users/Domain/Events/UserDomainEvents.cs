@@ -15,7 +15,6 @@ DateTime OccurredOn) : IDomainEvent
 {
     public Guid Id { get; } = Guid.NewGuid();
 }
-
 internal record UserPasswordUpdatedDomainEvent(
     Guid UserId,
     DateTime OccurredOn) : IDomainEvent
@@ -41,6 +40,14 @@ internal record UserRegisteredDomainEvent(
     Guid? HomeGymId = null,
     string? HomeGymName = null,
     bool HasTemporaryPassword = false) : IDomainEvent
+{
+    public Guid Id { get; } = Guid.NewGuid();
+}
+internal record UserMembershipLevelChangedDomainEvent(
+    Guid UserId,
+    MembershipLevel OldMembershipLevel,
+    MembershipLevel NewMembershipLevel,
+    DateTime OccurredOn) : IDomainEvent
 {
     public Guid Id { get; } = Guid.NewGuid();
 }

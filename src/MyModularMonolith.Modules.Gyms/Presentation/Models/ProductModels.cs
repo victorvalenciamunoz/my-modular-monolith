@@ -1,4 +1,5 @@
 ﻿using MyModularMonolith.Modules.Gyms.Contracts;
+using MyModularMonolith.Shared.Domain;
 
 namespace MyModularMonolith.Modules.Gyms.Presentation.Models
 {
@@ -12,12 +13,13 @@ namespace MyModularMonolith.Modules.Gyms.Presentation.Models
         bool HasCapacityLimits,
         bool IsActive,
         DateTime CreatedAt,
-        DateTime? UpdatedAt)
+        DateTime? UpdatedAt,
+        MembershipLevel MinimumRequiredMembership)
     {
         public static ProductResponse FromDto(ProductDto dto)
             => new(dto.Id, dto.Name, dto.Description, dto.BasePrice,
                    dto.RequiresSchedule, dto.RequiresInstructor, dto.HasCapacityLimits,
-                   dto.IsActive, dto.CreatedAt, dto.UpdatedAt);
+                   dto.IsActive, dto.CreatedAt, dto.UpdatedAt, dto.MinimumRequiredMembership);
     }
 
     public record ProductsListResponse(
@@ -38,5 +40,15 @@ namespace MyModularMonolith.Modules.Gyms.Presentation.Models
         decimal BasePrice,
         bool RequiresSchedule,
         bool RequiresInstructor,
-        bool HasCapacityLimits);
+        bool HasCapacityLimits,
+        MembershipLevel MinimumRequiredMembership);
+
+    public record UpdateProductRequest(
+        string Name,
+        string Description,
+        decimal BasePrice,
+        bool RequiresSchedule,
+        bool RequiresInstructor,
+        bool HasCapacityLimits,
+        MembershipLevel MinimumRequiredMembership);
 }

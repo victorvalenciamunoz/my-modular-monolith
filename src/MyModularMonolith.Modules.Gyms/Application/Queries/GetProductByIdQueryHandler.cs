@@ -35,6 +35,7 @@ internal class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery,
             product.HasCapacityLimits,
             product.IsActive,
             product.CreatedAt,
-            product.UpdatedAt);
+            product.UpdatedAt,
+            product.MinimumRequiredMembership);
     }
 }
