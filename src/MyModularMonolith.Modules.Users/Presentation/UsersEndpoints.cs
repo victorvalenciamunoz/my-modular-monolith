@@ -9,6 +9,7 @@ using MyModularMonolith.Modules.Users.Domain;
 using MyModularMonolith.Modules.Users.Presentation.Models;
 using MyModularMonolith.Shared.Domain.ValueObjects;
 using MyModularMonolith.Shared.Presentation;
+using MyModularMonolith.Shared.Security;
 
 namespace MyModularMonolith.Modules.Users.Endpoints;
 

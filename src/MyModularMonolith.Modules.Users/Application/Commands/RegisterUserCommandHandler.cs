@@ -7,6 +7,7 @@ using MyModularMonolith.Modules.Users.Contracts;
 using MyModularMonolith.Modules.Users.Contracts.Commands;
 using MyModularMonolith.Modules.Users.Domain;
 using MyModularMonolith.Shared.Application;
+using MyModularMonolith.Shared.Security;
 using System.Security.Claims;
 using System.Security.Cryptography;
 
