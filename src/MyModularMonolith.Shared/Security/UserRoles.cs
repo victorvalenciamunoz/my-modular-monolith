@@ -1,6 +1,6 @@
-﻿namespace MyModularMonolith.Modules.Users.Domain;
+﻿namespace MyModularMonolith.Shared.Security;
 
-internal static class UserRoles
+public static class UserRoles
 {
     public const string SuperAdmin = "SuperAdmin";
     public const string User = "User";
@@ -9,8 +9,8 @@ internal static class UserRoles
 
     public static readonly Dictionary<string, string> RoleDescriptions = new()
 {
-    { SuperAdmin, "Super Administrator with full system access" },
-    { User, "Client/Member of the gym chain" }
+{ SuperAdmin, "Super Administrator with full system access" },
+{ User, "Client/Member of the gym chain" }
 };
 
     public static bool IsValidRole(string role) => AllRoles.Contains(role);

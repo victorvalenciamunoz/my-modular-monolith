@@ -17,10 +17,10 @@ namespace MyModularMonolith.Modules.Users;
 
 public static class UsersModuleExtensions
 {
-    public static IServiceCollection AddUsersModule(this IServiceCollection services, IConfiguration configuration, List<System.Reflection.Assembly> mediatRAssemblies)
+    public static IServiceCollection AddUsersModule(this IServiceCollection services, List<System.Reflection.Assembly> mediatRAssemblies)
     {
         services.AddScoped<IDateTimeProvider, DateTimeProvider>();
-
+        
         services.AddIdentity<ApplicationUser, ApplicationRole>(options =>
         {
             // Password settings
@@ -38,31 +38,13 @@ public static class UsersModuleExtensions
             options.Lockout.MaxFailedAccessAttempts = 5;
             options.Lockout.AllowedForNewUsers = true;
         })
-        .AddEntityFrameworkStores<UsersDbContext>()
+        .AddEntityFrameworkStores<UsersDbContext>()        
         .AddDefaultTokenProviders();
 
-        // JWT Authentication
-        services.AddAuthentication(options =>
-        {
-            options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-            options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-        })
-        .AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]!)),
-                ValidateIssuer = true,
-                ValidIssuer = configuration["JWT:Issuer"],
-                ValidateAudience = true,
-                ValidAudience = configuration["JWT:Audience"],
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
-        });
-
         services.AddAuthorization();
+
+        services.AddOptions<JwtOptions>()
+           .BindConfiguration(JwtOptions.SectionName);
 
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         services.AddScoped<IUnitOfWork>(provider =>

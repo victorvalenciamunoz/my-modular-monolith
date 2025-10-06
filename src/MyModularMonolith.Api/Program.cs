@@ -1,5 +1,7 @@
-using MediatR;
+﻿using MediatR;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using MyModularMonolith.Modules.AI;
 using MyModularMonolith.Modules.Gyms;
 using MyModularMonolith.Modules.Gyms.Contracts;
@@ -8,6 +10,7 @@ using MyModularMonolith.Modules.Users;
 using MyModularMonolith.Modules.Users.Infrastructure;
 using Serilog;
 using System.Reflection;
+using System.Text;
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -56,11 +59,82 @@ builder.Services.AddOpenApi();
 
 List<Assembly> mediatRAssemblies = [typeof(Program).Assembly];
 
-builder.Services.AddUsersModule(builder.Configuration, mediatRAssemblies);
+builder.Services.AddUsersModule(mediatRAssemblies);
 builder.Services.AddGymsModule(builder.Configuration, mediatRAssemblies);
 builder.Services.AddAIModule(builder.Configuration);
 
 builder.Services.AddMediatR(mediatRAssemblies.ToArray());
+
+// Log JWT configuration being used
+var jwtSecret = builder.Configuration["JWT:Secret"];
+var jwtIssuer = builder.Configuration["JWT:Issuer"];
+var jwtAudience = builder.Configuration["JWT:Audience"];
+
+Log.Information("🔐 JWT Configuration: Issuer={Issuer}, Audience={Audience}, SecretLength={SecretLength}",
+    jwtIssuer, jwtAudience, jwtSecret?.Length ?? 0);
+
+builder.Services.AddAuthentication(options =>
+{
+    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+})
+        .AddJwtBearer(options =>
+        {
+            options.TokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret!)),
+                ValidateIssuer = true,
+                ValidIssuer = jwtIssuer,
+                ValidateAudience = true,
+                ValidAudience = jwtAudience,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            options.Events = new JwtBearerEvents
+            {
+                OnAuthenticationFailed = context =>
+                {
+                    Log.Error("Authentication failed: {Error}", context.Exception.Message);
+                    if (context.Exception is SecurityTokenExpiredException)
+                    {
+                        Log.Error("Token has expired");
+                    }
+                    else if (context.Exception is SecurityTokenInvalidSignatureException)
+                    {
+                        Log.Error("Token signature is invalid - Secret mismatch!");
+                    }
+                    return Task.CompletedTask;
+                },
+                OnTokenValidated = context =>
+                {
+                    Log.Information("✅ Token validated successfully for user: {User}",
+                        context.Principal?.Identity?.Name ?? "Unknown");
+                    return Task.CompletedTask;
+                },
+                OnChallenge = context =>
+                {
+                    Log.Warning("⚠️ Authentication challenge: Error={Error}, ErrorDescription={ErrorDescription}",
+                        context.Error ?? "null", context.ErrorDescription ?? "null");
+                    return Task.CompletedTask;
+                },
+                OnMessageReceived = context =>
+                {
+                    var authHeader = context.Request.Headers.Authorization.ToString();
+                    if (!string.IsNullOrEmpty(authHeader))
+                    {
+                        Log.Debug("📩 Authorization header received: {HeaderStart}...",
+                            authHeader.Length > 50 ? authHeader.Substring(0, 50) : authHeader);
+                    }
+                    else
+                    {
+                        Log.Warning("⚠️ No Authorization header found in request");
+                    }
+                    return Task.CompletedTask;
+                }
+            };
+        });
 
 var app = builder.Build();
 

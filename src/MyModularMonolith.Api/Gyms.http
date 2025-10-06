@@ -1,25 +1,44 @@
-@MyModularMonolith.Api_HostAddress = http://localhost:5182
+@MyModularMonolith.Api_HostAddress = https://localhost:7014
 @contentType = application/json
+
+# ===========================================
+# AUTHENTICATION - GET TOKEN FIRST
+# ===========================================
+
+### Login as SuperAdmin (Required for secured endpoints)
+# @name login
+POST {{MyModularMonolith.Api_HostAddress}}/api/auth/login
+Content-Type: {{contentType}}
+
+{
+  "email": "admin@gym.com",
+  "password": "Admin123!"
+}
+
+###
+@token = {{login.response.body.$.accessToken}}
 
 # ===========================================
 # GYMS MODULE - GYMS ENDPOINTS
 # ===========================================
 
-### 1. Get All Active Gyms 
+### 1. Get All Active Gyms (Anonymous - No token required)
 GET {{MyModularMonolith.Api_HostAddress}}/api/gyms
 Accept: application/json
 
 ###
 
-### 2. Get Gym by ID
+### 2. Get Gym by ID (Requires Authentication)
 GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333
-Accept: application/json
+Accept: text/plain
+Authorization: Bearer {{token}}
 
 ###
 
-### 3. Add New Gym
+### 3. Add New Gym (Requires SuperAdmin Role)
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms
 Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
   "name": "Grand Gym"
@@ -27,9 +46,10 @@ Content-Type: {{contentType}}
 
 ###
 
-### 4. Add New Gym - Premium Location
+### 4. Add New Gym - Premium Location (Requires SuperAdmin Role)
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms
 Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
   "name": "Fitness Premium Center"
@@ -37,9 +57,10 @@ Content-Type: {{contentType}}
 
 ###
 
-### 5. Add New Gym - Downtown Location
+### 5. Add New Gym - Downtown Location (Requires SuperAdmin Role)
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms
 Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
   "name": "Downtown Fitness Hub"
@@ -151,7 +172,7 @@ Content-Type: {{contentType}}
 ###
 
 ### 15. Create Product - Taquilla Premium
-POST {{MyModularMonolith.Api_HostAddress}}/api/products
+POST {{MyModularMonolith.Api_HostAddress}>/api/products
 Content-Type: {{contentType}}
 
 {
@@ -218,7 +239,7 @@ Content-Type: {{contentType}}
   "instructorEmail": "roberto.garcia@gymsur.com",
   "instructorPhone": "+34 666 111 222",
   "notes": "Clase de spinning con música electrónica",
-  "equipment": "Bicicletas estáticas Life Fitness, sistema de sonido Bose"
+  "equipment": "Biciclatas estáticas Life Fitness, sistema de sonido Bose"
 }
 
 ###
@@ -286,9 +307,10 @@ Content-Type: {{contentType}}
 # GYMS ERROR SCENARIOS FOR TESTING
 # ===========================================
 
-### 24. Create Gym with Empty Name (Validation Error)
+### 24. Create Gym with Empty Name (Validation Error - Requires SuperAdmin)
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms
 Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
   "name": ""
@@ -296,9 +318,10 @@ Content-Type: {{contentType}}
 
 ###
 
-### 25. Create Gym with Duplicate Name (Conflict Error)
+### 25. Create Gym with Duplicate Name (Conflict Error - Requires SuperAdmin)
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms
 Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
   "name": "Gym Central"
@@ -306,9 +329,10 @@ Content-Type: {{contentType}}
 
 ###
 
-### 26. Create Gym with Very Long Name (Validation Error)
+### 26. Create Gym with Very Long Name (Validation Error - Requires SuperAdmin)
 POST {{MyModularMonolith.Api_HostAddress}}/api/gyms
 Content-Type: {{contentType}}
+Authorization: Bearer {{token}}
 
 {
   "name": "This is a very long gym name that exceeds the maximum allowed length of 100 characters and should cause a validation error when trying to create it"
@@ -417,6 +441,26 @@ Content-Type: {{contentType}}
   "price": 15.00,
   "minCapacity": 30,
   "maxCapacity": 10
+}
+
+###
+
+# ===========================================
+# SECURITY ERROR SCENARIOS FOR TESTING
+# ===========================================
+
+### 36. Get Gym by ID without Token (Should return 401 Unauthorized)
+GET {{MyModularMonolith.Api_HostAddress}}/api/gyms/33333333-3333-3333-3333-333333333333
+Accept: application/json
+
+###
+
+### 37. Add Gym without Token (Should return 401 Unauthorized)
+POST {{MyModularMonolith.Api_HostAddress}}/api/gyms
+Content-Type: {{contentType}}
+
+{
+  "name": "Unauthorized Gym"
 }
 
 ###

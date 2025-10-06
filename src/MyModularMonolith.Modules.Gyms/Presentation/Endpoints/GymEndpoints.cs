@@ -7,6 +7,7 @@ using MyModularMonolith.Modules.Gyms.Contracts.Commands;
 using MyModularMonolith.Modules.Gyms.Contracts.Queries;
 using MyModularMonolith.Modules.Gyms.Presentation.Models;
 using MyModularMonolith.Shared.Presentation;
+using MyModularMonolith.Shared.Security;
 
 namespace MyModularMonolith.Modules.Gyms.Presentation.Endpoints;
 
@@ -22,7 +23,8 @@ public static class GymEndpoints
             .WithSummary("Get all active gyms")
             .WithDescription("Retrieves a list of all active gyms in the system")
             .Produces<GymsListResponse>(StatusCodes.Status200OK)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .AllowAnonymous();
 
         group.MapGet("/{id:guid}", GetGymById)
             .WithName("GetGymById")
@@ -30,8 +32,10 @@ public static class GymEndpoints
             .WithDescription("Retrieves detailed information about a specific gym")
             .Produces<GymResponse>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status404NotFound)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
             .ProducesProblem(StatusCodes.Status400BadRequest)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization();
 
         group.MapPost("/", AddGym)
             .WithName("AddGym")
@@ -39,8 +43,11 @@ public static class GymEndpoints
             .WithDescription("Creates a new gym in the system")
             .Produces<GymResponse>(StatusCodes.Status201Created)
             .ProducesProblem(StatusCodes.Status400BadRequest)
+            .ProducesProblem(StatusCodes.Status401Unauthorized)
+            .ProducesProblem(StatusCodes.Status403Forbidden)
             .ProducesProblem(StatusCodes.Status409Conflict)
-            .ProducesProblem(StatusCodes.Status500InternalServerError);
+            .ProducesProblem(StatusCodes.Status500InternalServerError)
+            .RequireAuthorization(policy => policy.RequireRole(UserRoles.SuperAdmin));
     }
 
     private static async Task<IResult> GetActiveGyms(

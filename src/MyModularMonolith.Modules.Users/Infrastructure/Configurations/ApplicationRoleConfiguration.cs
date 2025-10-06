@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using MyModularMonolith.Modules.Users.Domain;
+using MyModularMonolith.Shared.Security;
 
 namespace MyModularMonolith.Modules.Users.Infrastructure.Configurations;
 

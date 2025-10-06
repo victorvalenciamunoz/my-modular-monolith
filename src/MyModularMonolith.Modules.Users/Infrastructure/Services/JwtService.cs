@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MyModularMonolith.Modules.Users.Application.Services;
 using MyModularMonolith.Modules.Users.Domain;
@@ -14,20 +14,20 @@ namespace MyModularMonolith.Modules.Users.Infrastructure.Services;
 
 internal class JwtService : IJwtService
 {
-    private readonly IConfiguration _configuration;
     private readonly UserManager<ApplicationUser> _userManager;
     private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly JwtOptions _jwtOptions;
 
-    public JwtService(IConfiguration configuration, UserManager<ApplicationUser> userManager, IDateTimeProvider dateTimeProvider)
+    public JwtService(IOptions<JwtOptions> jwtOptions, UserManager<ApplicationUser> userManager, IDateTimeProvider dateTimeProvider)
     {
-        _configuration = configuration;
+        _jwtOptions = jwtOptions.Value;
         _userManager = userManager;
         _dateTimeProvider = dateTimeProvider;
     }
 
     public async Task<ErrorOr<string>> GenerateAccessTokenAsync(ApplicationUser user)
     {
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!));
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secret));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
         var roles = await _userManager.GetRolesAsync(user);
@@ -45,10 +45,10 @@ internal class JwtService : IJwtService
 
         var currentTime = _dateTimeProvider.UtcNow;
         var token = new JwtSecurityToken(
-            issuer: _configuration["JWT:Issuer"],
-            audience: _configuration["JWT:Audience"],
+            issuer: _jwtOptions.Issuer,
+            audience: _jwtOptions.Audience,
             claims: claims,
-            expires: currentTime.AddMinutes(double.Parse(_configuration["JWT:AccessTokenExpirationMinutes"]!)),
+            expires: currentTime.AddMinutes(_jwtOptions.AccessTokenExpirationMinutes),
             signingCredentials: credentials
         );
 
@@ -68,16 +68,16 @@ internal class JwtService : IJwtService
         try
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["JWT:Secret"]!);
+            var key = Encoding.UTF8.GetBytes(_jwtOptions.Secret);
 
             tokenHandler.ValidateToken(token, new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
                 ValidateIssuer = true,
-                ValidIssuer = _configuration["JWT:Issuer"],
+                ValidIssuer = _jwtOptions.Issuer,
                 ValidateAudience = true,
-                ValidAudience = _configuration["JWT:Audience"],
+                ValidAudience = _jwtOptions.Audience,
                 ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             }, out SecurityToken validatedToken);
