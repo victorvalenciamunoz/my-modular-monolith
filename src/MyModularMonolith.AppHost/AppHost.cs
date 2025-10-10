@@ -19,4 +19,7 @@ var api = builder.AddProject<Projects.MyModularMonolith_Api>("api")
     .WaitFor(sqlServer)
     .WithHttpCommand("/migrate", displayName:"Apply migrations");
 
+var frontAdmin = builder.AddProject<Projects.MyModularMonolith_AdminUI>("frontadmin")
+    .WithReference(api);
+
 builder.Build().Run();

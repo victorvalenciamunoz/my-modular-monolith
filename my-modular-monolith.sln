@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.12.36426.23
+# Visual Studio Version 18
+VisualStudioVersion = 18.0.11104.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 	ProjectSection(SolutionItems) = preProject
@@ -35,6 +35,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.ServiceDefaults", "src\MyModularMonolith.ServiceDefaults\MyModularMonolith.ServiceDefaults.csproj", "{9595AB5D-7FE1-4F51-A606-D76392A58627}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.ModulesAI.Tests", "src\MyModularMonolith.ModulesAI.Tests\MyModularMonolith.ModulesAI.Tests.csproj", "{4B90214D-3773-4157-B440-4B96451202E2}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "front", "front", "{91D250B7-6F09-4CD4-9AC5-5456E3E18BBE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyModularMonolith.AdminUI", "MyModularMonolith.AdminUI\MyModularMonolith.AdminUI.csproj", "{9ABFD2FE-E0D1-4409-AE08-83A380479A89}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -166,6 +170,18 @@ Global
 		{4B90214D-3773-4157-B440-4B96451202E2}.Release|x64.Build.0 = Release|Any CPU
 		{4B90214D-3773-4157-B440-4B96451202E2}.Release|x86.ActiveCfg = Release|Any CPU
 		{4B90214D-3773-4157-B440-4B96451202E2}.Release|x86.Build.0 = Release|Any CPU
+		{9ABFD2FE-E0D1-4409-AE08-83A380479A89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9ABFD2FE-E0D1-4409-AE08-83A380479A89}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9ABFD2FE-E0D1-4409-AE08-83A380479A89}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{9ABFD2FE-E0D1-4409-AE08-83A380479A89}.Debug|x64.Build.0 = Debug|Any CPU
+		{9ABFD2FE-E0D1-4409-AE08-83A380479A89}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{9ABFD2FE-E0D1-4409-AE08-83A380479A89}.Debug|x86.Build.0 = Debug|Any CPU
+		{9ABFD2FE-E0D1-4409-AE08-83A380479A89}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9ABFD2FE-E0D1-4409-AE08-83A380479A89}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9ABFD2FE-E0D1-4409-AE08-83A380479A89}.Release|x64.ActiveCfg = Release|Any CPU
+		{9ABFD2FE-E0D1-4409-AE08-83A380479A89}.Release|x64.Build.0 = Release|Any CPU
+		{9ABFD2FE-E0D1-4409-AE08-83A380479A89}.Release|x86.ActiveCfg = Release|Any CPU
+		{9ABFD2FE-E0D1-4409-AE08-83A380479A89}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -185,6 +201,8 @@ Global
 		{D24FFC04-49F5-4C2A-B205-47B91BDAD0DC} = {FFF7F32E-0912-4DC6-8B75-17F3D3571DAB}
 		{9595AB5D-7FE1-4F51-A606-D76392A58627} = {FFF7F32E-0912-4DC6-8B75-17F3D3571DAB}
 		{4B90214D-3773-4157-B440-4B96451202E2} = {5D041B67-9173-4BEA-B073-99CFE306EF9A}
+		{91D250B7-6F09-4CD4-9AC5-5456E3E18BBE} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{9ABFD2FE-E0D1-4409-AE08-83A380479A89} = {91D250B7-6F09-4CD4-9AC5-5456E3E18BBE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C724328A-2234-48CF-923D-0A52828E9262}
