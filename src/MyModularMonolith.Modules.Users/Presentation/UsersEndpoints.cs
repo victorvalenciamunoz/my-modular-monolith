@@ -4,7 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using MyModularMonolith.Modules.Users.Application.Services;
+using MyModularMonolith.Modules.Users.Contracts;
 using MyModularMonolith.Modules.Users.Contracts.Commands;
+using MyModularMonolith.Modules.Users.Contracts.Queries.GetByUserId;
 using MyModularMonolith.Modules.Users.Domain;
 using MyModularMonolith.Modules.Users.Presentation.Models;
 using MyModularMonolith.Shared.Domain.ValueObjects;
@@ -21,6 +23,7 @@ public static class UsersEndpoints
             .WithTags("Authentication");
 
         group.MapPost("/register", RegisterUser)
+            .AllowAnonymous()
             .WithName("RegisterUser")
             .WithSummary("Register a new user")
             .Produces<RegistrationResponse>(StatusCodes.Status201Created)
@@ -29,6 +32,7 @@ public static class UsersEndpoints
             .ProducesValidationProblem();
 
         group.MapPost("/login", LoginUser)
+            .AllowAnonymous()
             .WithName("LoginUser")
             .WithSummary("Authenticate user and get tokens")
             .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
@@ -100,10 +104,28 @@ public static class UsersEndpoints
 
         var result = await mediator.Send(command, cancellationToken);
 
-        return result.Match(
-            success => Results.Ok(success),
-            errors => result.ToProblemDetails()
+        if (result.IsError)
+        {
+            return result.ToProblemDetails();
+        }
+
+        var login = result.Value;
+
+        var userResult = await mediator.Send(new GetUserByIdQuery(login.UserId), cancellationToken);
+        if (userResult.IsError)
+        {
+            return userResult.ToProblemDetails();
+        }
+
+        var authDto = new AuthenticationDto(
+            userResult.Value,
+            login.AccessToken,
+            login.RefreshToken,
+            login.RefreshTokenExpires
         );
+
+        var response = AuthenticationResponse.FromDto(authDto);
+        return Results.Ok(response);
     }
 
     private static async Task<IResult> ChangePassword(

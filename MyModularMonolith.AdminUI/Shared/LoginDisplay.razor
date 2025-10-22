@@ -1,0 +1,21 @@
+﻿@using MyModularMonolith.AdminUI.Authentication.Services
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+
+<AuthorizeView>
+    <Authorized>
+        Hello, @context.User.Identity?.Name!
+        <button class="nav-link btn btn-link" @onclick="BeginLogout">Log out</button>
+    </Authorized>
+    <NotAuthorized>
+        <a href="login">Log in</a>
+    </NotAuthorized>
+</AuthorizeView>
+
+@code {
+    private async Task BeginLogout()
+    {
+        await AuthenticationService.LogoutAsync();
+        NavigationManager.NavigateTo("/");
+    }
+}
