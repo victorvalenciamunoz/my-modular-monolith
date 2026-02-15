@@ -34,11 +34,30 @@ public class AuthenticationService : IAuthenticationService
                 {
                     return Error.Forbidden("Login.InvalidRole", "You don't have permissions");
                 }
+
+                // Validar que se recibieron tokens
+                if (string.IsNullOrEmpty(authResponse.AccessToken) || string.IsNullOrEmpty(authResponse.RefreshToken))
+                {
+                    return Error.Unexpected("Login.MissingTokens", "Authentication tokens were not received.");
+                }
+
                 var userSession = new UserSession(
                     $"{authResponse.User.FirstName} {authResponse.User.LastName}",
                     authResponse.User.Email!,
                     authResponse.User.Role!);
-                await _authenticationStateProvider.UpdateAuthenticationState(userSession);
+
+                // Calcular fecha de expiración (convertir Unix timestamp a DateTime)
+                var expiresAt = authResponse.RefreshTokenExpires > 0 
+                    ? DateTimeOffset.FromUnixTimeSeconds(authResponse.RefreshTokenExpires).UtcDateTime
+                    : DateTime.UtcNow.AddHours(1); // Fallback: 1 hora
+
+                // Actualizar estado con tokens
+                await _authenticationStateProvider.UpdateAuthenticationStateAsync(
+                    userSession,
+                    authResponse.AccessToken,
+                    authResponse.RefreshToken,
+                    expiresAt);
+
                 return Result.Success;
             }
 
@@ -53,6 +72,6 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task LogoutAsync()
     {
-        await _authenticationStateProvider.UpdateAuthenticationState(null);
+        await _authenticationStateProvider.UpdateAuthenticationStateAsync(null);
     }
 }
