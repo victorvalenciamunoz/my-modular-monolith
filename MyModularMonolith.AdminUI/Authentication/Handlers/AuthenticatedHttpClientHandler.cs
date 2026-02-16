@@ -1,5 +1,6 @@
 using System.Net.Http.Headers;
 using System.Text.Json;
+using Microsoft.Extensions.Logging;
 using MyModularMonolith.AdminUI.Authentication.Models;
 using MyModularMonolith.AdminUI.Authentication.Services;
 
@@ -10,15 +11,18 @@ public class AuthenticatedHttpClientHandler : DelegatingHandler
     private readonly ISessionCookieService _sessionCookieService;
     private readonly ITokenService _tokenService;
     private readonly IHttpClientFactory _httpClientFactory;
+    private readonly ILogger<AuthenticatedHttpClientHandler> _logger;
 
     public AuthenticatedHttpClientHandler(
         ISessionCookieService sessionCookieService,
         ITokenService tokenService,
-        IHttpClientFactory httpClientFactory)
+        IHttpClientFactory httpClientFactory,
+        ILogger<AuthenticatedHttpClientHandler> logger)
     {
         _sessionCookieService = sessionCookieService;
         _tokenService = tokenService;
         _httpClientFactory = httpClientFactory;
+        _logger = logger;
     }
 
     protected override async Task<HttpResponseMessage> SendAsync(
