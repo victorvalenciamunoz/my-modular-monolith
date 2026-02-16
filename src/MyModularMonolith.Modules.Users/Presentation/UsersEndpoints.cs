@@ -33,11 +33,13 @@ public static class UsersEndpoints
 
         group.MapPost("/login", LoginUser)
             .AllowAnonymous()
+            .RequireRateLimiting("login")  // 🛡️ FASE 1: Rate limiting por IP (20 req/min)
             .WithName("LoginUser")
             .WithSummary("Authenticate user and get tokens")
             .Produces<AuthenticationResponse>(StatusCodes.Status200OK)
             .ProducesProblem(StatusCodes.Status400BadRequest)
-            .ProducesProblem(StatusCodes.Status404NotFound);
+            .ProducesProblem(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status429TooManyRequests); // Documentar 429
 
         group.MapPost("/change-password", ChangePassword)
             .WithName("ChangePassword")
