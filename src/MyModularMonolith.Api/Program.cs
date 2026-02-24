@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
+using MyModularMonolith.Api.Extensions;
 using MyModularMonolith.Modules.AI;
 using MyModularMonolith.Modules.Gyms;
 using MyModularMonolith.Modules.Gyms.Contracts;
@@ -10,7 +9,6 @@ using MyModularMonolith.Modules.Users;
 using MyModularMonolith.Modules.Users.Infrastructure;
 using Serilog;
 using System.Reflection;
-using System.Text;
 
 var configuration = new ConfigurationBuilder()
     .AddJsonFile("appsettings.json")
@@ -65,76 +63,11 @@ builder.Services.AddAIModule(builder.Configuration);
 
 builder.Services.AddMediatR(mediatRAssemblies.ToArray());
 
-// Log JWT configuration being used
-var jwtSecret = builder.Configuration["JWT:Secret"];
-var jwtIssuer = builder.Configuration["JWT:Issuer"];
-var jwtAudience = builder.Configuration["JWT:Audience"];
+// Authentication & Authorization
+builder.Services.AddJwtAuthentication(builder.Configuration);
 
-Log.Information("🔐 JWT Configuration: Issuer={Issuer}, Audience={Audience}, SecretLength={SecretLength}",
-    jwtIssuer, jwtAudience, jwtSecret?.Length ?? 0);
-
-builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-})
-        .AddJwtBearer(options =>
-        {
-            options.TokenValidationParameters = new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSecret!)),
-                ValidateIssuer = true,
-                ValidIssuer = jwtIssuer,
-                ValidateAudience = true,
-                ValidAudience = jwtAudience,
-                ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
-            };
-
-            options.Events = new JwtBearerEvents
-            {
-                OnAuthenticationFailed = context =>
-                {
-                    Log.Error("Authentication failed: {Error}", context.Exception.Message);
-                    if (context.Exception is SecurityTokenExpiredException)
-                    {
-                        Log.Error("Token has expired");
-                    }
-                    else if (context.Exception is SecurityTokenInvalidSignatureException)
-                    {
-                        Log.Error("Token signature is invalid - Secret mismatch!");
-                    }
-                    return Task.CompletedTask;
-                },
-                OnTokenValidated = context =>
-                {
-                    Log.Information("✅ Token validated successfully for user: {User}",
-                        context.Principal?.Identity?.Name ?? "Unknown");
-                    return Task.CompletedTask;
-                },
-                OnChallenge = context =>
-                {
-                    Log.Warning("⚠️ Authentication challenge: Error={Error}, ErrorDescription={ErrorDescription}",
-                        context.Error ?? "null", context.ErrorDescription ?? "null");
-                    return Task.CompletedTask;
-                },
-                OnMessageReceived = context =>
-                {
-                    var authHeader = context.Request.Headers.Authorization.ToString();
-                    if (!string.IsNullOrEmpty(authHeader))
-                    {
-                        Log.Debug("📩 Authorization header received: {HeaderStart}...",
-                            authHeader.Length > 50 ? authHeader.Substring(0, 50) : authHeader);
-                    }
-                    else
-                    {
-                        Log.Warning("⚠️ No Authorization header found in request");
-                    }
-                    return Task.CompletedTask;
-                }
-            };
-        });
+// Rate Limiting
+builder.Services.AddApiRateLimiting();
 
 var app = builder.Build();
 
@@ -146,23 +79,13 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseSerilogRequestLogging(options =>
-{
-    options.MessageTemplate = "HTTP {RequestMethod} {RequestPath} responded {StatusCode} in {Elapsed:0.0000} ms";
-    options.GetLevel = (httpContext, elapsed, ex) => ex != null
-        ? Serilog.Events.LogEventLevel.Error
-        : elapsed > 1000
-            ? Serilog.Events.LogEventLevel.Warning
-            : Serilog.Events.LogEventLevel.Information;
-    options.EnrichDiagnosticContext = (diagnosticContext, httpContext) =>
-    {
-        diagnosticContext.Set("RequestHost", httpContext.Request.Host.Value);
-        diagnosticContext.Set("RequestScheme", httpContext.Request.Scheme);
-        diagnosticContext.Set("UserAgent", httpContext.Request.Headers.UserAgent.FirstOrDefault());
-    };
-});
+// Enhanced request logging with Serilog
+app.UseEnhancedRequestLogging();
 
-// Authentication & Authorization middleware (ORDER IS IMPORTANT)
+// Rate Limiting (BEFORE Authentication)
+app.UseRateLimiter();
+
+// Authentication & Authorization
 app.UseAuthentication();
 app.UseAuthorization();
 
@@ -171,27 +94,10 @@ app.MapUsersEndpoints();
 app.MapGymsEndpoints();
 app.MapAIEndpoints();
 
+// Development endpoints
 if (app.Environment.IsDevelopment())
 {
-    app.MapPost("/migrate", async (IServiceProvider services) =>
-    {
-        using var scope = services.CreateScope();
-
-        var usersContext = scope.ServiceProvider.GetRequiredService<UsersDbContext>();
-        Log.Information("Starting Users module database migrations");
-        await usersContext.Database.MigrateAsync();
-        Log.Information("Users module database migrations applied");
-
-        var gymsContext = scope.ServiceProvider.GetRequiredService<GymsDbContext>();
-        Log.Information("Starting Gyms module database migrations");
-        await gymsContext.Database.MigrateAsync();
-        Log.Information("Gyms module database migrations applied");
-
-        Log.Information("Database migrations completed successfully");
-        return Results.Ok("Migrations completed successfully");
-    })
-    .WithName("RunMigrations")
-    .WithTags("Database");
+    app.MapDevelopmentEndpoints();
 }
 
 // Health check endpoint

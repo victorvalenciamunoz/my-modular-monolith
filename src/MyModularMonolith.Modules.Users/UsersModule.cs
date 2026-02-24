@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using MyModularMonolith.Modules.Users.Application.Security;
 using MyModularMonolith.Modules.Users.Application.Services;
 using MyModularMonolith.Modules.Users.Domain;
 using MyModularMonolith.Modules.Users.Endpoints;
@@ -54,6 +55,15 @@ public static class UsersModuleExtensions
         services.AddScoped<IEmailService, EmailService>();
         services.AddSingleton<IUserMetricsService, UserMetricsService>();
 
+        // Rate limiting y seguridad
+        // TODO: [REDIS-MIGRATION] Cambiar a Singleton cuando se use Redis (IDistributedCache)
+        services.AddScoped<ILoginAttemptService, InMemoryLoginAttemptService>();
+        services.Configure<LoginRateLimitOptions>(options =>
+        {
+            options.MaxFailedAttempts = 5;           // Máximo de intentos antes de lockout
+            options.LockoutDuration = TimeSpan.FromMinutes(15); // Duración del lockout
+            options.CleanupInterval = TimeSpan.FromHours(1);    // Limpieza de memoria
+        });
 
         mediatRAssemblies.Add(typeof(UsersModuleExtensions).Assembly);
 

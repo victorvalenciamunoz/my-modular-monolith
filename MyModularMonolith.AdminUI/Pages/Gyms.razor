@@ -1,0 +1,49 @@
+﻿@page "/gyms"
+@using MyModularMonolith.AdminUI.Gyms.Models
+@using System.Text.Json
+
+@inject BackendHttpClient BackendHttpClient
+@attribute [Authorize(Policy = "SuperAdminPolicy")]
+
+<PageTitle>Gyms</PageTitle>
+
+<h1>Gyms</h1>
+
+<p>This component demonstrates fetching data from the API.</p>
+
+@if (gyms is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var gym in gyms)
+            {
+                <tr>
+                    <td>@gym.Name</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<GymResponse>? gyms;
+     
+
+    protected override async Task OnInitializedAsync()
+    {
+        var response = await BackendHttpClient.HttpClient.GetFromJsonAsync<GymsListResponse>("api/gyms");
+        if (response is not null)
+        {
+            gyms = response.Gyms;
+        }
+    }
+}

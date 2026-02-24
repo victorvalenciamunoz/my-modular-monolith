@@ -18,6 +18,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<ProjectReference Include="..\..\MyModularMonolith.AdminUI\MyModularMonolith.AdminUI.csproj" />
 		<ProjectReference Include="..\MyModularMonolith.Api\MyModularMonolith.Api.csproj" />
 		<ProjectReference Include="..\MyModularMonolith.ServiceDefaults\MyModularMonolith.ServiceDefaults.csproj" />
 	</ItemGroup>

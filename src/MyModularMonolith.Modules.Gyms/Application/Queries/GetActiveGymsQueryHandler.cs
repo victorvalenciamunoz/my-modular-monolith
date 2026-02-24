@@ -32,30 +32,28 @@ internal class GetActiveGymsQueryHandler : IRequestHandler<GetActiveGymsQuery, E
     }
 
     public async Task<ErrorOr<List<GymDto>>> Handle(GetActiveGymsQuery request, CancellationToken cancellationToken)
-    {        
-        _logger.LogInformation("Handling GetActiveGymsQuery");        
+    {
+        _logger.LogInformation("Handling GetActiveGymsQuery");
 
-        var activeOrderedSpec = new GetActiveGymsSpec();
-
-        var gyms = await _cache.GetOrSetAsync(
-            GymsCacheKeys.ActiveGymsList,
+        var cacheKey = GymsCacheKeys.ActiveGymsList;
+        var result = await _cache.GetOrSetAsync<List<GymDto>>(
+            cacheKey,
             async _ =>
             {
-                _logger.LogInformation("Cache miss for {CacheKey} - fetching from database", GymsCacheKeys.ActiveGymsList);
+                _logger.LogInformation("Fetching active gyms from database");
+                var activeOrderedSpec = new GetActiveGymsSpec();
                 var gymEntities = await _gymRepository.ListAsync(activeOrderedSpec, cancellationToken);
-                var result = gymEntities.Select(gym => new GymDto(
+                return gymEntities.Select(gym => new GymDto(
                                         gym.Id,
                                         gym.Name,
                                         gym.IsActive,
                                         gym.CreatedAt,
                                         gym.UpdatedAt)).ToList();
-                _logger.LogInformation("Retrieved {Count} gyms from database", result.Count);
-                return result;
             },
-            TimeSpan.FromMinutes(_cacheConfig.Durations.GymList),
+            TimeSpan.FromMinutes(_cacheConfig.Durations.GymList)
+            ,
             cancellationToken);
 
-        _logger.LogInformation("Cache hit for {CacheKey} - returning {Count} gyms from cache", GymsCacheKeys.ActiveGymsList, gyms.Count);
-        return gyms;
+        return result;
     }
 }

@@ -1,0 +1,53 @@
+﻿@page "/login"
+@attribute [AllowAnonymous]
+@using ErrorOr
+@using MyModularMonolith.AdminUI.Authentication.Models
+@using MyModularMonolith.AdminUI.Authentication.Services
+@inject IAuthenticationService AuthenticationService
+@inject NavigationManager NavigationManager
+
+<h3>Login</h3>
+
+<EditForm Model="@_loginModel" OnValidSubmit="HandleLogin">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="form-group">
+        <label for="email">Email</label>
+        <InputText id="email" class="form-control" @bind-Value="_loginModel.Email" />
+        <ValidationMessage For="@(() => _loginModel.Email)" />
+    </div>
+
+    <div class="form-group">
+        <label for="password">Password</label>
+        <InputText id="password" type="password" class="form-control" @bind-Value="_loginModel.Password" />
+        <ValidationMessage For="@(() => _loginModel.Password)" />
+    </div>
+
+    @if (!string.IsNullOrEmpty(_errorMessage))
+    {
+        <div class="alert alert-danger">@_errorMessage</div>
+    }
+
+    <button type="submit" class="btn btn-primary">Login</button>
+</EditForm>
+
+@code {
+    private readonly LoginModel _loginModel = new();
+    private string? _errorMessage;
+
+    private async Task HandleLogin()
+    {
+        _errorMessage = null;
+        var result = await AuthenticationService.LoginAsync(_loginModel);
+
+        if (result.IsError)
+        {
+            _errorMessage = result.FirstError.Description;
+        }
+        else
+        {
+            NavigationManager.NavigateTo("/");
+        }
+    }
+}

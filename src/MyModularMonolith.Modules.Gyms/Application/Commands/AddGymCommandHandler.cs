@@ -10,9 +10,6 @@ using MyModularMonolith.Modules.Gyms.Contracts.Commands;
 using MyModularMonolith.Modules.Gyms.Domain;
 using MyModularMonolith.Modules.Gyms.Domain.Specifications;
 using MyModularMonolith.Shared.Application;
-using System;
-using System.Collections.Generic;
-using System.Text;
 using ZiggyCreatures.Caching.Fusion;
 
 namespace MyModularMonolith.Modules.Gyms.Application.Commands;
@@ -46,7 +43,7 @@ internal class AddGymCommandHandler : IRequestHandler<AddGymCommand, ErrorOr<Gym
     public async Task<ErrorOr<GymDto>> Handle(AddGymCommand request, CancellationToken cancellationToken)
     {
         try
-        {            
+        {
             var gymByNameSpec = new GetGymByNameSpec(request.Name);
             var existingGym = await _gymRepository.FirstOrDefaultAsync(gymByNameSpec, cancellationToken);
             if (existingGym is not null)
@@ -67,7 +64,7 @@ internal class AddGymCommandHandler : IRequestHandler<AddGymCommand, ErrorOr<Gym
                 gymDto,
                 TimeSpan.FromMinutes(_cacheConfig.Durations.Gym),
                 cancellationToken);
-                        
+
             await _cache.ExpireAsync(GymsCacheKeys.ActiveGymsList, token: cancellationToken);
 
             _logger.LogInformation("Created new gym with ID {GymId} and name '{GymName}'", gym.Id, gym.Name);
